@@ -1,11 +1,17 @@
 from django.db import models
-from . import (
-    product,
-    location
-)
+from inventory.models.product import Product
+from inventory.models.location import Location
 
 
 class LocationStock(models.Model):
-    product = models.ManyToManyField(product.Product)
-    location = models.ForeignKey(location.Location, on_delete=models.CASCADE)
+    product = models.ManyToManyField(Product)
+    location = models.ForeignKey(
+        Location, on_delete=models.CASCADE,
+        related_name="location_stocks",
+        blank=True,
+        null=True
+    )
     stock = models.IntegerField(default=0)
+
+    class Meta:
+        db_table = "location_stock"

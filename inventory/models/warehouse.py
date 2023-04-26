@@ -1,9 +1,11 @@
 from django.db import models
-from . import transfer
 
 
 class Warehouse(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, blank=True)
+
+    class Meta:
+        db_table = "warehouse"
 
     def __str__(self):
-        return f"Warehouse({self.name})"
+        return f"{self.name}"

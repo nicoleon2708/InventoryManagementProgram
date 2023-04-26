@@ -1,16 +1,27 @@
 from django.db import models
-from . import product, transfer
-from django.utils import timezone
+from inventory.models.product import Product
+from inventory.models.transfer import Transfer
 
 
 class TransferDetail(models.Model):
-    product = models.ManyToManyField(product.Product)
-    transfer = models.ForeignKey(transfer.Transfer, on_delete=models.CASCADE)
-    status = models.CharField(max_length=100)
-    method = models.CharField(max_length=100)
-    scheduled_time = models.DateTimeField(default=timezone.now())
-    note = models.TextField(max_length=500)
-    transportation_type = models.CharField(max_length=100)
+    product = models.ManyToManyField(Product)
+    transfer = models.ForeignKey(
+        Transfer, on_delete=models.CASCADE,
+        related_name="transfer_detail",
+        blank=True, null=True
+    )
+    status = models.CharField(max_length=100, blank=True)
+    method = models.CharField(max_length=100, blank=True)
+    scheduled_time = models.DateTimeField(
+        auto_now_add=True,
+        blank=True,
+        null=True
+    )
+    note = models.TextField(max_length=500, blank=True)
+    transportation_type = models.CharField(max_length=100, blank=True)
+
+    class Meta:
+        db_table = "transfer_detail"
 
     def __str__(self):
         return f"TransferDetail{self}"
