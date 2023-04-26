@@ -22,6 +22,8 @@ class TransferDetail(models.Model):
 
     class Meta:
         db_table = "transfer_detail"
+        verbose_name = "Transfer Detail"
+        verbose_name_plural = "Transfer Details"
 
     def __str__(self):
         return f"TransferDetail{self}"

@@ -7,6 +7,8 @@ class Role(models.Model):
 
     class Meta:
         db_table = "role"
+        verbose_name = "Role"
+        verbose_name_plural = "Roles"
 
     def __str__(self):
         return f"Role({self.name})"

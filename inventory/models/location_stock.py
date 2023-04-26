@@ -11,7 +11,9 @@ class LocationStock(models.Model):
         blank=True,
         null=True
     )
-    stock = models.IntegerField(default=0)
+    stock = models.IntegerField(default=0, blank=True, null=True)
 
     class Meta:
         db_table = "location_stock"
+        verbose_name = "Location Stock"
+        verbose_name_plural = "Location Stocks"

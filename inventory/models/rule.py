@@ -7,7 +7,7 @@ class Rule(models.Model):
     description = models.TextField(max_length=500, blank=True)
     group = models.ForeignKey(
         GroupRule,
-        on_delete=models.CASCADE,
+        on_delete=models.DO_NOTHING,
         related_name='rules',
         blank=True,
         null=True
@@ -15,6 +15,8 @@ class Rule(models.Model):
 
     class Meta:
         db_table = "rule"
+        verbose_name = "Rule"
+        verbose_name_plural = "Rules"
 
     def __str__(self):
         return f"Rule({self.name})"

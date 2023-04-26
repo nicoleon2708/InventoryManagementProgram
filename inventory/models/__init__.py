@@ -1,9 +1,9 @@
-from . import (
+from inventory.models import (
     company,
     group_rule,
     location_stock,
     location,
-    logistics_controller,
+    outcome,
     outcome_detail,
     partner,
     product,
