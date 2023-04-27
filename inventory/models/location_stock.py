@@ -4,7 +4,13 @@ from inventory.models.location import Location
 
 
 class LocationStock(models.Model):
-    product = models.ManyToManyField(Product)
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        related_name="stocked_at",
+        blank=True,
+        null=True
+    )
     location = models.ForeignKey(
         Location, on_delete=models.CASCADE,
         related_name="location_stocks",

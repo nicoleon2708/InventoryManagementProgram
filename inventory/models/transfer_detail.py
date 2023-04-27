@@ -12,6 +12,20 @@ class TransferDetail(models.Model):
         blank=True,
         null=True
     )
+
+    class StatusChoice(models.TextChoices):
+        on_pending = ("PENDING", "On Pending"),
+        received = ("RECEIVED", "Received"),
+        on_transfer = ("TRANSFER", "On Transfer"),
+        completed = ("COMPLETED", "Completed")
+
+    status = models.CharField(
+        max_length=255,
+        choices=StatusChoice.choices,
+        default=StatusChoice.on_pending,
+        blank=True
+    )
+
     status = models.CharField(max_length=100, blank=True)
     method = models.CharField(max_length=100, blank=True)
     scheduled_time = models.DateTimeField(

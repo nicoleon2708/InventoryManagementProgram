@@ -1,11 +1,11 @@
 from django.db import models
-from inventory.models.user import User
+from inventory.models.user import CustomUser
 from inventory.models.partner import Partner
 
 
 class Outcome(models.Model):
     user = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.CASCADE,
         related_name="partner_outcome",
         blank=True,
@@ -24,7 +24,19 @@ class Outcome(models.Model):
         blank=True,
         null=True
     )
-    status = models.CharField(max_length=255, blank=True)
+
+    class StatusChoice(models.TextChoices):
+        on_pending = ("PENDING", "On Pending"),
+        received = ("RECEIVED", "Received"),
+        on_shipping = ("SHIPPING", "On Shipping"),
+        completed = ("COMPLETED", "Completed")
+
+    status = models.CharField(
+        max_length=255,
+        choices=StatusChoice.choices,
+        default=StatusChoice.on_pending,
+        blank=True
+    )
 
     class Meta:
         db_table = "outcome"

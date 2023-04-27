@@ -1,8 +1,8 @@
 from django.contrib import admin
-from inventory.models.user import User
+from inventory.models.user import CustomUser
 
 
 class UserInLine(admin.TabularInline):
-    model = User
+    model = CustomUser
     fields = ['username']
     readonly_fields = ['username']

@@ -6,6 +6,8 @@ class Location(models.Model):
     address = models.CharField(max_length=255, blank=True)
     postal_code = models.CharField(max_length=255, blank=True)
     city = models.CharField(max_length=255, blank=True)
+    district = models.CharField(max_length=255, blank=True)
+
     warehouse = models.ForeignKey(
         Warehouse,
         on_delete=models.CASCADE,

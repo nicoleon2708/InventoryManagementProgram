@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'inventory.apps.InventoryConfig'
 ]
 
+AUTH_USER_MODEL = 'inventory.CustomUser'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

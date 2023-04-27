@@ -10,6 +10,7 @@ class Company(models.Model):
     address = models.CharField(max_length=255, blank=True)
     postal_code = models.CharField(max_length=255, blank=True)
     city = models.CharField(max_length=255, blank=True)
+    district = models.CharField(max_length=255, blank=True)
 
     class Meta:
         db_table = "company"
