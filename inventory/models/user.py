@@ -7,7 +7,8 @@ from datetime import timezone
 
 class User(models.Model):
     company = models.ForeignKey(
-        Company, on_delete=models.CASCADE,
+        Company,
+        on_delete=models.CASCADE,
         related_name='users',
         blank=True,
         null=True

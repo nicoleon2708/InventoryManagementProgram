@@ -7,4 +7,3 @@ class TransferDetailAdmin(admin.ModelAdmin):
                     'scheduled_time', 'note', 'transportation_type']
 
 
-admin.site.register(TransferDetail, TransferDetailAdmin)

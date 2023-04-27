@@ -11,6 +11,3 @@ class CompanyAdmin(admin.ModelAdmin):
     list_display = ['name', 'contact_name', 'phone']
 
     inlines = [UserInLine]
-
-
-admin.site.register(Company, CompanyAdmin)

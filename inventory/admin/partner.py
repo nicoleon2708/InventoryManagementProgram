@@ -4,6 +4,3 @@ from inventory.models.partner import Partner
 
 class PartnerAdmin(admin.ModelAdmin):
     list_display = ['company_name', 'contact_name', 'contact_phone']
-
-
-admin.site.register(Partner, PartnerAdmin)

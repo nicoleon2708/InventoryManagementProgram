@@ -12,6 +12,3 @@ class WarehouseAdmin(admin.ModelAdmin):
 
     def location_count(self, obj):
         return obj.locations.count()
-
-
-admin.site.register(Warehouse, WarehouseAdmin)

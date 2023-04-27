@@ -6,9 +6,11 @@ from inventory.models.transfer import Transfer
 class TransferDetail(models.Model):
     product = models.ManyToManyField(Product)
     transfer = models.ForeignKey(
-        Transfer, on_delete=models.CASCADE,
+        Transfer,
+        on_delete=models.CASCADE,
         related_name="transfer_detail",
-        blank=True, null=True
+        blank=True,
+        null=True
     )
     status = models.CharField(max_length=100, blank=True)
     method = models.CharField(max_length=100, blank=True)
