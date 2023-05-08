@@ -15,8 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from . import views
+from inventory.views.user import RegistrationView
+from inventory.api.user import ListUser
+from inventory.api.register import RegisterAPI
+from inventory.api.login import LoginAPI
 
 urlpatterns = [
-    path('', views.index, name="index"),
+    # path('', index.index, name="index"),
+    path('api/users/', ListUser.as_view(), name="users"),
+    # user creation and authentication
+    path('api/users/register/', RegisterAPI.as_view(), name="api-register"),
+    path('api/users/login/', LoginAPI.as_view(), name="api-login"),
+    path('register/', RegistrationView.as_view(), name="register"),
 ]
