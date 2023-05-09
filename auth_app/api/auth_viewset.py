@@ -8,7 +8,12 @@ from rest_framework.decorators import action
 
 class AuthViewSet(viewsets.ModelViewSet):
 
-    @action(methods=["GET", "POST"], detail=False, url_path="login")
+    # serializer_class = UserSerializer
+    
+    @action(methods=["GET", "POST"], 
+            detail=False, 
+            url_path="login",
+            serializer_class=UserSerializer)
     def login(self, request, pk=None):
         print(123)
         
