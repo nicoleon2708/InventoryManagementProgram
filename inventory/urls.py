@@ -15,8 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from . import views
-
+from rest_framework.authtoken.views import obtain_auth_token
+app_name = "inventory"
 urlpatterns = [
-    path('', views.index, name="index"),
+    # path('users/', ListUser.as_view(), name="users"),
+    # user creation and authentication
 ]
