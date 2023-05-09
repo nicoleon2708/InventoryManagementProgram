@@ -1,11 +1,11 @@
 from django.db import models
-from inventory.models.user import CustomUser
+from inventory.models.user import User
 from inventory.models.partner import Partner
 
 
 class Outcome(models.Model):
     user = models.ForeignKey(
-        CustomUser,
+        User,
         on_delete=models.CASCADE,
         related_name="partner_outcome",
         blank=True,

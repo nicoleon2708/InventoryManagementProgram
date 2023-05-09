@@ -5,10 +5,10 @@ from django.urls import reverse
 from django.views import generic
 from django.http import HttpResponse
 from inventory.forms.user import RegisterForm
-from inventory.models.user import CustomUser
+from inventory.models.user import User
 
 
 class RegistrationView(generic.CreateView):
-    model = CustomUser
+    model = User
     template_name = 'inventory/register.html'
     form_class = RegisterForm

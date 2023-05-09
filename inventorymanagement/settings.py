@@ -40,9 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'inventory.apps.InventoryConfig',
-    'crispy_forms',
-    'rest_framework.authtoken'
+    'auth_app.apps.AuthAppConfig'
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
@@ -60,7 +60,7 @@ REST_FRAMEWORK = {
 
 }
 
-AUTH_USER_MODEL = 'inventory.CustomUser'
+AUTH_USER_MODEL = 'inventory.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

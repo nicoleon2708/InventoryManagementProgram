@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import viewsets
 from rest_framework.authtoken.models import Token
-from auth_app.serializers.company import CompanySerializer
-from auth_app.serializers.user import UserSerializer
+from auth_app.serializers.company_serializer import CompanySerializer
+from auth_app.serializers.user_serializer import UserSerializer
 from rest_framework import status
 from rest_framework.validators import ValidationError
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
@@ -13,7 +13,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import authenticate
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
-from auth_app.api.authentication import ExpiringTokenAuthentication
+from auth_app.authentication import ExpiringTokenAuthentication
 
 
 class CompanyViewSet(viewsets.ModelViewSet):

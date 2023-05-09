@@ -1,12 +1,12 @@
 from django.db import models
 from inventory.models.warehouse import Warehouse
 from inventory.models.outcome import Outcome
-from inventory.models.user import CustomUser
+from inventory.models.user import User
 
 
 class Transfer(models.Model):
     user = models.ForeignKey(
-        CustomUser,
+        User,
         on_delete=models.CASCADE,
         related_name="transfers",
         blank=True,

@@ -9,7 +9,7 @@ from rest_framework.authtoken.models import Token
 # Create User Model
 
 
-class CustomUser(AbstractUser):
+class User(AbstractUser):
     company = models.ForeignKey(
         Company,
         on_delete=models.CASCADE,
