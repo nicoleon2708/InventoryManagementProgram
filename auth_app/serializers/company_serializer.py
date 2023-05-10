@@ -1,14 +1,18 @@
 from inventory.models.company import Company
+from inventory.models.user import User
 from rest_framework import serializers
 
 
 class CompanySerializer(serializers.ModelSerializer):
+    users = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
 
     class Meta:
         model = Company
-        fields = '__all__'
+        fields = ['id', 'name', 'contact_name', 'phone',
+                  'address', 'postal_code', 'city', 'district', 'users']
 
     def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
         return Company.objects.create(**validated_data)
 
     def update(self, instance, validated_data):

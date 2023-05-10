@@ -21,3 +21,6 @@ class CompanyViewSet(viewsets.ModelViewSet):
     serializer_class = CompanySerializer
     # permission_classes = [IsAuthenticated]
     # authentication_classes = [ExpiringTokenAuthentication]
+
+    def perform_create(self, serializer):
+        serializer.save(users=self.request.user.id)
