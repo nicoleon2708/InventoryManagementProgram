@@ -1,21 +1,23 @@
-from inventory.models.company import Company
+from inventory.models.partner import Partner
 from rest_framework import serializers
 
 
-class CompanySerializer(serializers.ModelSerializer):
+class PartnerSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Company
+        model = Partner
         fields = '__all__'
 
     def create(self, validated_data):
-        return Company.objects.create(**validated_data)
+        return Partner.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
-        instance.name = validated_data.get('name', instance.name)
+        instance.company_name = validated_data.get(
+            'company_name', instance.company_name)
         instance.contact_name = validated_data.get(
             'contact_name', instance.contact_name)
-        instance.phone = validated_data.get('phone', instance.phone)
+        instance.contact_phone = validated_data.get(
+            'contact_phone', instance.contact_phone)
         instance.address = validated_data.get('address', instance.address)
         instance.postal_code = validated_data.get(
             'postal_code', instance.postal_code)
