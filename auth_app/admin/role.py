@@ -1,5 +1,5 @@
 from django.contrib import admin
-from inventory.models.role import Role
+from auth_app.models.role import Role
 
 
 class RoleAdmin(admin.ModelAdmin):

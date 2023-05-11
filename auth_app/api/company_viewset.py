@@ -8,7 +8,7 @@ from auth_app.serializers.company_serializer import CompanySerializer
 from auth_app.serializers.user_serializer import UserSerializer
 from rest_framework import status
 from rest_framework.validators import ValidationError
-from rest_framework.permissions import IsAuthenticated
+from auth_app.permissions.is_user_of_company_permission import IsUserOrReadOnly
 from rest_framework.authentication import authenticate
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
@@ -19,8 +19,11 @@ from rest_framework.decorators import action
 class CompanyViewSet(viewsets.ModelViewSet):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
-    # permission_classes = [IsAuthenticated]
-    # authentication_classes = [ExpiringTokenAuthentication]
+    permission_classes = [IsUserOrReadOnly]
+    authentication_classes = [ExpiringTokenAuthentication]
+
+    def get_queryset(self):
+        return Company.objects.filter(pk=self.request.user.id)
 
     def perform_create(self, serializer):
-        serializer.save(users=self.request.user.id)
+        serializer.save(users=self.request.user)

@@ -1,5 +1,5 @@
 from django.db import models
-from inventory.models.user import User
+from auth_app.models.user import User
 from inventory.models.partner import Partner
 
 

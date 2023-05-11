@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from inventory.models.user import User
+from auth_app.models.user import User
 
 
 class CustomerUserAdmin(UserAdmin):

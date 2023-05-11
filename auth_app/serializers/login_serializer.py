@@ -1,14 +1,27 @@
 from rest_framework import serializers
-from inventory.models.user import User
+from auth_app.models.user import User
 from rest_framework.validators import ValidationError
 import datetime
 import pytz
 from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import update_last_login
+from django.contrib.auth.hashers import check_password
 
 
 class LoginSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(max_length=255)
-    password = serializers.CharField(max_length=255, write_only=True)
+    username = serializers.CharField(
+        max_length=255,
+        style={
+            'placeholder': 'Username',
+            'autofocus': True
+        }
+    )
+    password = serializers.CharField(
+        max_length=255,
+        style={
+            'input_type': 'password',
+            'placeholder': 'Password'
+        })
     token = serializers.CharField(max_length=255, read_only=True)
 
     class Meta:
@@ -25,16 +38,19 @@ class LoginSerializer(serializers.ModelSerializer):
         if not username and not password:
             raise ValidationError("You must enter username and password!")
 
-        user = User.objects.filter(username=username)
-        if not user.exists():
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
             raise ValidationError("User with this username does not exist")
-        user = User.objects.get(username=username)
+        
+        if not check_password(password, user.password):
+            raise ValidationError("Password of this user is not correct, try again!")
         utc_now = datetime.datetime.utcnow()
         utc_now = utc_now.replace(tzinfo=pytz.utc)
         result = Token.objects.filter(
             user=user, created__lt=utc_now-datetime.timedelta(days=1)).delete()
         token, created = Token.objects.get_or_create(user=user)
+        update_last_login(None, user)
         data['user'] = user
         data['token'] = token.key
-
         return data

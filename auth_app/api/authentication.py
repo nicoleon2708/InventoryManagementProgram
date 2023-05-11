@@ -1,4 +1,4 @@
-from rest_framework.authentication import TokenAuthentication, get_authorization_header
+from rest_framework.authentication import BaseAuthentication, TokenAuthentication, get_authorization_header
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.authtoken.models import Token
 import datetime
@@ -23,3 +23,5 @@ class ExpiringTokenAuthentication(TokenAuthentication):
                 "Token has been expired, please log in again!")
 
         return token.user, token
+
+

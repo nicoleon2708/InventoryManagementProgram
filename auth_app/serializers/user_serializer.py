@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from inventory.models.user import User
+from auth_app.models.user import User
 from rest_framework.validators import ValidationError
 
 

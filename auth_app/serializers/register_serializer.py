@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from inventory.models.user import User
+from auth_app.models.user import User
 from rest_framework.validators import ValidationError
 
 
@@ -16,6 +16,12 @@ class RegisterSerializer(serializers.ModelSerializer):
         }
 
     def validate(self, data):
+        if not data['username']:
+            raise ValidationError("You must enter username!")
+        if not data['email']:
+            raise ValidationError("You must enter email!")
+        if not data['password'] or not data['confirm_password']:
+            raise ValidationError("You must enter password")
         if data['password'] != data['confirm_password']:
             raise ValidationError("Confirm password does not match!")
         return data

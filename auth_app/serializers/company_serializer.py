@@ -1,10 +1,10 @@
 from inventory.models.company import Company
-from inventory.models.user import User
+from auth_app.models.user import User
 from rest_framework import serializers
 
 
 class CompanySerializer(serializers.ModelSerializer):
-    users = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    users = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
         model = Company
