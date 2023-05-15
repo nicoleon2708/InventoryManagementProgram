@@ -24,6 +24,10 @@ class RegisterSerializer(serializers.ModelSerializer):
             raise ValidationError("You must enter password")
         if data['password'] != data['confirm_password']:
             raise ValidationError("Confirm password does not match!")
+
+        if User.objects.filter(username=data['username']):
+            raise ValidationError("This username is already exists!")
+
         return data
 
     def create(self, validated_data):

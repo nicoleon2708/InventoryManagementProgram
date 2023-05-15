@@ -9,10 +9,9 @@ from inventory.admin.partner import Partner, PartnerAdmin
 from inventory.admin.product import Product, ProductAdmin
 from auth_app.admin.role import Role, RoleAdmin
 from inventory.admin.rule import Rule, RuleAdmin
-from auth_app.models.user import User
+from auth_app.admin.user import User, UserAdmin
 from inventory.admin.transfer import Transfer, TransferAdmin
 from inventory.admin.transfer_detail import TransferDetail, TransferDetailAdmin
-from auth_app.admin.user import UserAdmin
 from inventory.admin.warehouse import Warehouse, WarehouseAdmin
 
 # Register your model

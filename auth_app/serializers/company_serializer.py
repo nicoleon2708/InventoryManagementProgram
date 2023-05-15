@@ -4,15 +4,15 @@ from rest_framework import serializers
 
 
 class CompanySerializer(serializers.ModelSerializer):
-    users = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    users = serializers.PrimaryKeyRelatedField(
+        many=True,
+        queryset=User.objects.all())
 
     class Meta:
         model = Company
-        fields = ['id', 'name', 'contact_name', 'phone',
-                  'address', 'postal_code', 'city', 'district', 'users']
+        fields = '__all__'
 
     def create(self, validated_data):
-        validated_data['user'] = self.context['request'].user
         return Company.objects.create(**validated_data)
 
     def update(self, instance, validated_data):

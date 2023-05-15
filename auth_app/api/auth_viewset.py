@@ -2,12 +2,11 @@ from auth_app.models.user import User
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.validators import ValidationError
 from auth_app.serializers.user_serializer import UserSerializer
 from auth_app.serializers.login_serializer import LoginSerializer
 from auth_app.serializers.register_serializer import RegisterSerializer
-
 from rest_framework.decorators import action, authentication_classes, permission_classes
 from django.contrib.auth import authenticate, logout
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -18,6 +17,7 @@ class AuthViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+    @permission_classes([AllowAny])
     @action(methods=["POST"],
             detail=False,
             url_path="login",
@@ -29,7 +29,7 @@ class AuthViewSet(viewsets.ModelViewSet):
             "message": "Login succesful",
             "user": serializer.data
         }
-        
+
         return JsonResponse(
             data=data,
             status=status.HTTP_200_OK

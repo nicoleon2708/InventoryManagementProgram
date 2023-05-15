@@ -1,5 +1,6 @@
 from django.db import models
 from inventory.models.company import Company
+from auth_app.models.role import Role
 from datetime import timezone
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
@@ -17,6 +18,13 @@ class User(AbstractUser):
         blank=True,
         null=True
     )
+
+    role = models.ForeignKey(
+        Role,
+        related_name='users',
+        on_delete=models.DO_NOTHING,
+        blank=True,
+        null=True)
 
     def __str__(self):
         return f"User({self.username})"

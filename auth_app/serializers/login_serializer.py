@@ -23,13 +23,15 @@ class LoginSerializer(serializers.ModelSerializer):
             'placeholder': 'Password'
         })
     token = serializers.CharField(max_length=255, read_only=True)
+    role = serializers.CharField(max_length=255, read_only=True)
 
     class Meta:
         model = User
-        fields = ('username', 'password', 'token')
+        fields = ('username', 'password', 'token', 'role')
         extra_kwargs = {
             'password': {'write_only': 'True'},
-            'token': {'read_only': 'True'}
+            'token': {'read_only': 'True'},
+            'role': {'read_only': 'True'},
         }
 
     def validate(self, data):
@@ -42,9 +44,10 @@ class LoginSerializer(serializers.ModelSerializer):
             user = User.objects.get(username=username)
         except User.DoesNotExist:
             raise ValidationError("User with this username does not exist")
-        
+
         if not check_password(password, user.password):
-            raise ValidationError("Password of this user is not correct, try again!")
+            raise ValidationError(
+                "Password of this user is not correct, try again!")
         utc_now = datetime.datetime.utcnow()
         utc_now = utc_now.replace(tzinfo=pytz.utc)
         result = Token.objects.filter(
