@@ -12,3 +12,8 @@ from inventory.models import (
     transfer_detail,
     warehouse
 )
+
+from auth_app.models import (
+    user,
+    role
+)

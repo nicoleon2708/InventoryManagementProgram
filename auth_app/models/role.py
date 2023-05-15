@@ -2,7 +2,21 @@ from django.db import models
 
 
 class Role(models.Model):
-    name = models.CharField(max_length=100, blank=True)
+
+    class TypeChoice(models.TextChoices):
+        is_superuser = (
+            "SUPERUSER", "Superuser"
+        )
+        is_admin = (
+            "ADMIN", "Admin")
+        is_owner = (
+            "OWNER", "Owner")
+
+    type_of_roles = models.CharField(
+        max_length=255,
+        choices=TypeChoice.choices,
+        default=TypeChoice.is_owner
+    )
     description = models.TextField(max_length=500, blank=True)
 
     class Meta:
@@ -11,4 +25,4 @@ class Role(models.Model):
         verbose_name_plural = "Roles"
 
     def __str__(self):
-        return f"Role({self.name})"
+        return f"Role({self.type_of_roles})"

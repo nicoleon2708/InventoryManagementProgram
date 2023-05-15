@@ -1,11 +1,12 @@
 from django.db import models
 from auth_app.models.user import User
 from inventory.models.partner import Partner
+from django.conf import settings
 
 
 class Outcome(models.Model):
     user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="partner_outcome",
         blank=True,

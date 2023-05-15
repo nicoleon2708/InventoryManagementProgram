@@ -1,8 +1,6 @@
 from django.contrib import admin
-from inventory.models.company import Company
-from auth_app.models.user import User
 from inventory.admin.tabinlines.user_in_line import UserInLine
-
+from inventory.models.company import Company
 
 class CompanyAdmin(admin.ModelAdmin):
 

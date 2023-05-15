@@ -2,11 +2,12 @@ from django.db import models
 from inventory.models.warehouse import Warehouse
 from inventory.models.outcome import Outcome
 from auth_app.models.user import User
+from django.conf import settings
 
 
 class Transfer(models.Model):
     user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="transfers",
         blank=True,

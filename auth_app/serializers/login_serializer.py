@@ -56,4 +56,5 @@ class LoginSerializer(serializers.ModelSerializer):
         update_last_login(None, user)
         data['user'] = user
         data['token'] = token.key
+        data['role'] = user.role
         return data

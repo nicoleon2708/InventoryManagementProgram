@@ -24,7 +24,14 @@ class User(AbstractUser):
         related_name='users',
         on_delete=models.DO_NOTHING,
         blank=True,
-        null=True)
+        null=True,
+        default=2)
+
+    is_verified = models.BooleanField(default=False)
+    email_verification_token = models.CharField(
+        max_length=255, null=True, blank=True)
+    forget_password_token = models.CharField(
+        max_length=255, null=True, blank=True)
 
     def __str__(self):
         return f"User({self.username})"

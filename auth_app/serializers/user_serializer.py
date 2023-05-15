@@ -1,9 +1,13 @@
 from rest_framework import serializers
 from auth_app.models.user import User
+from inventory.models.company import Company
 from rest_framework.validators import ValidationError
 
 
 class UserSerializer(serializers.ModelSerializer):
+    company = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=Company.objects.all())
+
     class Meta:
         model = User
         fields = "__all__"
