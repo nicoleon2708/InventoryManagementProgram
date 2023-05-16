@@ -8,25 +8,11 @@ from auth_app.serializers.login_serializer import LoginSerializer
 from auth_app.serializers.register_serializer import RegisterSerializer
 from rest_framework.decorators import action, authentication_classes, permission_classes
 from auth_app.api.authentication import ExpiringTokenAuthentication
-import datetime
-import pytz
-from rest_framework.authtoken.models import Token
-from django.contrib.auth.models import update_last_login
 
 
 class AuthViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-
-    def process_login(self, user):
-        utc_now = datetime.datetime.utcnow()
-        utc_now = utc_now.replace(tzinfo=pytz.utc)
-        result = Token.objects.filter(
-            user=user, created__lt=utc_now-datetime.timedelta(days=1)).delete()
-        token, created = Token.objects.get_or_create(user=user)
-        update_last_login(None, user)
-
-        return user
 
     @permission_classes([AllowAny])
     @action(methods=["POST"],
@@ -34,9 +20,9 @@ class AuthViewSet(viewsets.ModelViewSet):
             url_path="login",
             serializer_class=LoginSerializer)
     def login(self, request, *args, **kwargs):
-        login_data = self.process_login(request.data)
-        serializer = self.get_serializer(data=login_data)
+        serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        serializer.process_login(request.data)
         data = {
             "message": "Login succesful",
             "user": serializer.data,

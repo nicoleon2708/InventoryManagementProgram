@@ -19,8 +19,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'password',
-                  'confirm_password', 'contact_name', 'company_name',
-                  'phone', 'address', 'postal_code', 'district', 'city')
+                  'confirm_password')
         extra_kwargs = {
             'password': {'write_only': 'True'}
         }
@@ -54,20 +53,4 @@ class RegisterSerializer(serializers.ModelSerializer):
         )
         user.set_password(validated_data['password'])
         user.save()
-        # contact_name = validated_data.pop('contact_name')
-        # company_name = validated_data.pop('company_name')
-        # phone = validated_data.pop('phone')
-        # address = validated_data.pop('address')
-        # postal_code = validated_data.pop('postal_code')
-        # district = validated_data.pop('district')
-        # city = validated_data.pop('city')
-        # company = Company.objects.create(
-        #     name=company_name,
-        #     contact_name=contact_name,
-        #     phone=phone,
-        #     address=address,
-        #     postal_code=postal_code,
-        #     district=district,
-        #     city=city
-        # )
         return user

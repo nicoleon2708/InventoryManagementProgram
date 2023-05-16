@@ -16,7 +16,7 @@ class CompanyViewSet(viewsets.ModelViewSet):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
 
-    @permission_classes([IsAdminPermission])
+    @permission_classes([IsAuthenticated])
     @action(methods=['GET'],
             detail=False,
             url_path='list',
