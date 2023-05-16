@@ -7,5 +7,17 @@ class IsOwnerPermission(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        if request.user and request.user.role == 'ADMIN':
+        if request.user.is_authenticated:
             return True
+
+    def has_object_permission(self, request, view, obj):
+
+        # Check if user is a OWNER role
+        if request.user.role == 'OWNER':
+            return True
+
+        # Check if that user is belong to that company
+        if request.user in obj.users:
+            return True
+
+        return False

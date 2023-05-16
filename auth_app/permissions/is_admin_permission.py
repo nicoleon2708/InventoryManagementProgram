@@ -1,11 +1,10 @@
-from rest_framework import permissions
+from rest_framework.permissions import BasePermission, IsAuthenticated, SAFE_METHODS
 
 
-class IsAdminPermission(permissions.BasePermission):
+class IsAdminPermission(BasePermission):
     """
         Custom Admin permission, allow admin to manage all of company
     """
 
     def has_permission(self, request, view):
-        if request.user and request.user.role == 'ADMIN':
-            return request.method == "GET"
+        pass

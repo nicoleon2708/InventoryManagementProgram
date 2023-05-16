@@ -11,13 +11,6 @@ from rest_framework.authtoken.models import Token
 
 
 class User(AbstractUser):
-    company = models.ForeignKey(
-        Company,
-        on_delete=models.CASCADE,
-        related_name='users',
-        blank=True,
-        null=True
-    )
 
     role = models.ForeignKey(
         Role,
