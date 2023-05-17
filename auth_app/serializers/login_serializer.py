@@ -56,6 +56,9 @@ class LoginSerializer(serializers.ModelSerializer):
                 raise ValidationError(
                     "Password of this user is not correct, try again!")
 
+            # if not user.is_verified:
+            #     raise ValidationError("User's email has not verified yet!")
+
         data['user'] = user
 
         return data

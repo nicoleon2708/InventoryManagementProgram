@@ -26,5 +26,12 @@ class User(AbstractUser):
     forget_password_token = models.CharField(
         max_length=255, null=True, blank=True)
 
+    company_name = models.CharField(max_length=255, blank=True)
+    phone = models.CharField(max_length=255, blank=True)
+    address = models.CharField(max_length=255, blank=True)
+    postal_code = models.CharField(max_length=255, blank=True)
+    city = models.CharField(max_length=255, blank=True)
+    district = models.CharField(max_length=255, blank=True)
+
     def __str__(self):
         return f"User({self.username})"
