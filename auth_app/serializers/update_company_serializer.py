@@ -2,16 +2,25 @@ from inventory.models.company import Company
 from auth_app.serializers.user_serializer import UserSerializer
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
+from rest_framework.validators import ValidationError
 
 
-class CompanySerializer(serializers.ModelSerializer):
+class UpdateCompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = Company
-        fields = '__all__'
+        fields = ['id', 'name', 'first_name', 'last_name',
+                  'phone', 'district', 'city', 'address', 'user']
+        extra_kwargs = {
+            'user': {'read_only': 'True'}
+        }
+
+    def validate_phone(self, value):
+        if len(value) != 10:
+            raise ValidationError("The digits of phone number is not valid!")
 
     def update(self, instance, validated_data):
-        instance.company_name = validated_data.get(
-            'company_name', instance.company_name)
+        instance.name = validated_data.get(
+            'name', instance.name)
         instance.first_name = validated_data.get(
             'first_name', instance.first_name)
         instance.last_name = validated_data.get(

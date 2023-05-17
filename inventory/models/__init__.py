@@ -7,11 +7,13 @@ from inventory.models import (
     outcome_detail,
     partner,
     product,
-    role,
     rule,
     transfer,
     transfer_detail,
-    user,
-    user_role,
     warehouse
+)
+
+from auth_app.models import (
+    user,
+    role
 )
