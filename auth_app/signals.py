@@ -12,7 +12,6 @@ from auth_app.serializers.company_serializer import CompanySerializer
 
 @receiver(post_save, sender=User)
 def register_company(sender, instance, created, **kwargs):
-    # if user create, company also be created
+    # if user instance create, company also be created
     if created:
-
         Company.objects.create(user=instance)

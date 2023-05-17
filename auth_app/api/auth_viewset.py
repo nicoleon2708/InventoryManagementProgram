@@ -1,5 +1,6 @@
 from auth_app.models.user import User
 from django.http import JsonResponse
+from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -8,6 +9,7 @@ from auth_app.serializers.login_serializer import LoginSerializer
 from auth_app.serializers.register_serializer import RegisterSerializer
 from rest_framework.decorators import action, authentication_classes, permission_classes
 from auth_app.api.authentication import ExpiringTokenAuthentication
+from rest_framework.authtoken.models import Token
 
 
 class AuthViewSet(viewsets.ModelViewSet):
@@ -23,9 +25,11 @@ class AuthViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.process_login(request.data)
+        token = serializer.validated_data.get('token')
+
         data = {
             "message": "Login succesful",
-            "user": serializer.data,
+            'token': token
         }
 
         return JsonResponse(

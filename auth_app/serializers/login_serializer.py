@@ -43,6 +43,8 @@ class LoginSerializer(serializers.ModelSerializer):
             user=user, created__lt=utc_now-datetime.timedelta(days=1)).delete()
         token, created = Token.objects.get_or_create(user=user)
         update_last_login(None, user)
+        self.validated_data['token'] = token.key
+
         self.user = user
 
     def validate(self, data):
@@ -53,6 +55,7 @@ class LoginSerializer(serializers.ModelSerializer):
             if not check_password(password, user.password):
                 raise ValidationError(
                     "Password of this user is not correct, try again!")
+
         data['user'] = user
 
         return data

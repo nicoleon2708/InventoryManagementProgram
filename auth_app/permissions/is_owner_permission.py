@@ -12,12 +12,7 @@ class IsOwnerPermission(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
 
-        # Check if user is a OWNER role
-        if request.user.role == 'OWNER':
+        if request.method in permissions.SAFE_METHODS:
             return True
 
-        # Check if that user is belong to that company
-        if request.user in obj.users:
-            return True
-
-        return False
+        return obj.user == request.user
