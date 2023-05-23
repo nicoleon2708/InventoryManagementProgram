@@ -1,8 +1,13 @@
+from django.urls import reverse
 from rest_framework import serializers
 from auth_app.models.user import User
 from rest_framework.validators import ValidationError
-from inventory.models.company import Company
-
+from django.contrib.sites.shortcuts import get_current_site
+from django.conf import settings
+from auth_app.utils import send_mail
+import requests
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.generics import GenericAPIView
 
 class RegisterSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(max_length=255,
@@ -17,6 +22,27 @@ class RegisterSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'password': {'write_only': 'True'}
         }
+    
+
+    def send_email_verification(self, request, user):
+        '''
+            this function send mail to user's email to 
+            get verification from user
+        '''
+        user_data = User.objects.get(id=user.get('id'))
+        current_site = get_current_site(request).domain
+        activate_token = RefreshToken.for_user(user_data).access_token
+        relative_link = reverse('auth_app:email-verification')
+        activate_link = 'http://'+current_site+relative_link+f'?token={activate_token}'
+
+        subject = "Activate your account"
+        message = "Click the link below to verify your email! \n" +f"{activate_link}"
+
+        recipient = user['email']
+
+        send_mail(subject, message, recipient)
+
+    
 
     def validate_username(self, value):
         if User.objects.filter(username=value):
@@ -34,6 +60,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         return value
 
     def validate(self, data):
+        username = data.get('username', None)
         if data['password'] != data['confirm_password']:
             raise ValidationError("Confirm password must be match!")
 
@@ -56,3 +83,4 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
+

@@ -17,14 +17,9 @@ class User(AbstractUser):
         related_name='users',
         on_delete=models.DO_NOTHING,
         blank=True,
-        null=True,
-        default=2)
+        null=True)
 
     is_verified = models.BooleanField(default=False)
-    email_verification_token = models.CharField(
-        max_length=255, null=True, blank=True)
-    forget_password_token = models.CharField(
-        max_length=255, null=True, blank=True)
 
     company_name = models.CharField(max_length=255, blank=True)
     phone = models.CharField(max_length=255, blank=True)

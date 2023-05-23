@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import Permission
 
 class Role(models.Model):
 
@@ -18,6 +18,8 @@ class Role(models.Model):
         default=TypeChoice.is_owner
     )
     description = models.TextField(max_length=500, blank=True)
+
+    permissions = models.ManyToManyField(Permission, blank=True, null=True)
 
     class Meta:
         db_table = "role"

@@ -1,25 +1,16 @@
 from inventory.models.partner import Partner
-from django.http import HttpResponse, JsonResponse
-from rest_framework.response import Response
-from rest_framework.views import APIView
+from django.http import JsonResponse
 from rest_framework import viewsets
-from rest_framework.authtoken.models import Token
 from auth_app.serializers.partner_serializer import PartnerSerializer
 from rest_framework import status
-from rest_framework.validators import ValidationError
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import authenticate
-from rest_framework.authtoken.views import ObtainAuthToken
-from rest_framework.authtoken.models import Token
-from auth_app.authentication import ExpiringTokenAuthentication
-from rest_framework.decorators import action
+from rest_framework.decorators import action, permission_classes
 from auth_app.serializers.register_partner_serializer import RegisterPartnerSerializer
-
-
+from rest_framework.permissions import IsAuthenticated
 class PartnerViewSet(viewsets.ModelViewSet):
     queryset = Partner.objects.all()
     serializer_class = PartnerSerializer
 
+    @permission_classes([IsAuthenticated])
     @action(methods=['POST'],
             detail=False,
             url_path='register',
