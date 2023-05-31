@@ -9,12 +9,11 @@ from auth_app.serializers.login_serializer import LoginSerializer
 from auth_app.serializers.logout_serializer import LogoutSerializer
 from auth_app.serializers.register_serializer import RegisterSerializer
 from rest_framework.decorators import action, authentication_classes, permission_classes
-from auth_app.api.authentication import ExpiringTokenAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 class AuthViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-
 
     @action(methods=["POST"],
             detail=False,
@@ -42,7 +41,7 @@ class AuthViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data['message'] = "Login successful"
-        data['tokens'] = serializer.validated_data['tokens']
+        data['token'] = serializer.validated_data.get('token')
         return JsonResponse(
             data=data,
             status=status.HTTP_200_OK
@@ -63,16 +62,14 @@ class AuthViewSet(viewsets.ModelViewSet):
             data=data,
             status=status.HTTP_200_OK
         )
-   
-    @authentication_classes([ExpiringTokenAuthentication])
+    
     @permission_classes([IsAuthenticated])
     @action(methods=["GET"],
             detail=False,
             url_path='info',
             serializer_class=UserSerializer)
     def get(self, request, format=None):
-        user = request.user
-        serializer = self.serializer_class(user)
+        serializer = UserSerializer(request.user)
         return JsonResponse(
             data=serializer.data,
             status=status.HTTP_200_OK

@@ -23,15 +23,19 @@ class RecoveryPasswordSerializer(serializers.ModelSerializer):
             to recovery account password
         '''
         user_data = self.validated_data['user']
-        print(user_data.id)
         uidb64 = urlsafe_base64_encode(force_bytes(user_data.id))
-        current_site = get_current_site(request).domain
+        # current_site = get_current_site(request).domain
+        # domains = request.META['HTTP_HOST']
+        # print(domains)
+        domain = settings.FRONT_END
+        # Extract the host domain from the URL
         recovery_token = PasswordResetTokenGenerator().make_token(user_data)
-        relative_link = reverse('auth_app:password-reset-confirm', kwargs={
-            "uidb64": uidb64,
-            'token': recovery_token
-        })
-        recovery_link = 'http://'+current_site+relative_link
+        # relative_link = reverse('auth_app:password-reset-confirm', kwargs={
+        #     "uidb64": uidb64,
+        #     'token': recovery_token
+        # })
+        recovery_link = f'http://{domain}/reset-password/{uidb64}/{recovery_token}/'
+        # recovery_link = 'http://'+current_site+relative_link
         subject = "Recovery your account"
         message = "Click the link below to reset your account's password! \n" +f"{recovery_link}"
 

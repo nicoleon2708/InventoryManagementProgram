@@ -3,14 +3,13 @@ from django.http import JsonResponse
 from rest_framework import viewsets
 from auth_app.serializers.partner_serializer import PartnerSerializer
 from rest_framework import status
-from rest_framework.decorators import action, permission_classes
+from rest_framework.decorators import action
 from auth_app.serializers.register_partner_serializer import RegisterPartnerSerializer
-from rest_framework.permissions import IsAuthenticated
+from auth_app.permissions.is_admin_permission import IsAdminPermission
 class PartnerViewSet(viewsets.ModelViewSet):
     queryset = Partner.objects.all()
     serializer_class = PartnerSerializer
 
-    @permission_classes([IsAuthenticated])
     @action(methods=['POST'],
             detail=False,
             url_path='register',

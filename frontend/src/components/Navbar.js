@@ -1,59 +1,76 @@
 import React, { useState, useEffect } from 'react'
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai'
-import { FiLogIn } from 'react-icons/fi'
-import { Link } from "react-router-dom";
-
+import authService from '../services/auth.service';
+import {useNavigate, Link} from 'react-router-dom'
 
 
 const Navbar = () => {
-    // state could be a empty list, object or a value
-    // useState return an array
-    const [nav, setNav] = useState(false)
 
-    const handleNav = () => {
-        setNav(!nav)
+    const [nav, setNav] = useState(false)
+    const handleClick = () => setNav(!nav)
+    const user = JSON.parse(localStorage.getItem('token'))
+    const navigate = useNavigate()
+
+    const logOut =(e)=>{
+        e.preventDefault()
+        if(authService.logout()){
+            navigate('/login')
+        }
     }
 
-    useEffect(() => {
-        handleNav();
-    }, nav);
+    return(
+        <div className='w-screen h-[80px] z-10 bg-zinc-200 fixed drop-shadow-lg'>
 
-    return (
-        <div className='flex p-10 justify-between items-center h-24 max-w-[1240px]  mx-auto text-white' >
-            <h1 className='text-3xl font-bold text-[#ffffff] cursor-pointer'><span className='text-[#017e84]'>F</span>ast <span className='text-[#017e84]'>T</span>ransfer</h1>
-            <ul className='hidden md:flex'>
-                <li className='p-4 font-bold text-[#ffffff] cursor-pointer'>
-                    <Link to='/'>Home</Link>
+            <div className='px-2 flex justify-between items-center w-full h-full'>
+                <div className='flex items-center'>
+                    <h1 className='text-3xl font-bold mr-4 sm:text-4xl'>FastTransfer.</h1>
+                    <ul className='hidden md:flex'>
+                        <li>Home</li>
+                        <li>About</li>
+                        <li>Features</li>
+                        <li>Pricing</li>
+                    </ul>
+                </div>
+                <div className='hidden md:flex pr-4'>
+                    {user ? (
+                        <div className='flex items-center'>
+                            <h1 className='mr-4'>Hello</h1>
+                            <button onClick={logOut} className='hover:text-green-600 mr-4'>
+                               Logout
+                            </button>
+                        </div>
+                    ):
+                    (
+                        <>
+                            <button className='hover:text-green-600 mr-4'>
+                                Sign In
+                            </button>
+                            <button className='bg-green-600 hover:bg-transparent px-8 py-3 rounded-lg text-white hover:border hover:border-green-600'>
+                                Sign Up
+                            </button>
+                        </>
+                    )
+                }
+                </div>
 
-                </li>
-                <li className='p-4 font-bold text-[#ffffff] cursor-pointer'>
-                    <Link to='/about'>About</Link>
-                </li>
-                <li className='p-4 font-bold text-[#ffffff] cursor-pointer'>
-                    <Link to='/contact'>Contact</Link>
-
-                </li>
-            </ul>
-            <ul className='hidden md:flex'>
-                <li className='p-4 font-bold text-[#ffffff] flex t'>
-                    <Link to='/login'>Login</Link>
-                </li>
-            </ul>
-
-            <div onClick={handleNav} className='block md:hidden cursor-pointer'>
-                {!nav ? <AiOutlineClose size={20} color='#ffffff' /> : <AiOutlineMenu size={20} color='#ffffff' />}
+                <div className='md:hidden cursor-pointer' onClick={handleClick}>
+                    
+                    {!nav ? <AiOutlineMenu className='w-5'/> : <AiOutlineClose className='w-5'/>}
+                </div>
             </div>
 
-            <div className={!nav ? 'fixed pl-10 left-0 top-0 w-[50%] h-full border-r border-r-gray-900 z-10 bg-white ease-in-out duration-500' : 'fixed right-[-100%]'}>
-                <ul className='pt-24 uppercase'>
-                    <li className=' border-b border-gray-600 text-black'>Home</li>
-                    <li className=' border-b border-gray-600 text-black'>About</li>
-                    <li className=' border-b border-gray-600 text-black'>Contact</li>
-                    <li className=' border-b border-gray-600 text-black'>Login</li>
-                </ul>
-            </div>
-        </div >
+            <ul className={!nav ? 'hidden': 'absolute bg-zinc-200 w-full px-8'}>
+                <li className='border-b-2 border-zinc-300 w-full'>Home</li>
+                <li className='border-b-2 border-zinc-300 w-full'>About</li>
+                <li className='border-b-2 border-zinc-300 w-full'>Features</li>
+                <li className='border-b-2 border-zinc-300 w-full'>Pricing</li>
+                <div className='flex flex-col my-4'>
+                    <button className='bg-transparent text-green-600 px-8 py-3 mb-4'>Sign In</button>
+                    <button className='px-8 py-3 bg-green-600'>Sign Up</button>
+                </div>
+            </ul>
 
+        </div>
     )
 }
 

@@ -1,0 +1,49 @@
+from rest_framework import serializers
+from rest_framework.validators import ValidationError
+from inventory.models.product import Product
+from inventory.models.warehouse import Warehouse
+
+class CreateProductSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(max_length=255)
+    unit = serializers.CharField(max_length=255)
+    weight = serializers.FloatField()
+    quantity = serializers.IntegerField()
+    price = serializers.FloatField()
+    image = serializers.ImageField(required=False)
+    description = serializers.CharField(max_length=255)
+
+
+    class Meta:
+        model = Product
+        fields  = ['id', 'name', 'unit', 'weight', 
+                    'quantity', 'price', 'image', 'description']
+
+    def validate_quantity(self, value):
+        if value < 0:
+            raise ValidationError("Quantity of product can not be negative!")
+        return value
+    
+    def validate_weight(self, value):
+        if value < 0:
+            raise ValidationError("Weight of product can not be negative!")
+        return value
+    
+    def validate_price(self, value):
+        if value < 0:
+            raise ValidationError("Raise of product can not be negative")
+        return value
+    
+    def create(self, validated_data):
+        user = self.context['request'].user
+        product = Product.objects.create(
+            name=self.validated_data['name'],
+            unit=self.validated_data['unit'],
+            weight=self.validated_data['weight'],
+            quantity=self.validated_data['quantity'],
+            price=self.validated_data['price'],
+            image=self.validated_data['image'],
+            description=self.validated_data['description'],
+            company = user.company
+        )
+        product.save()
+        return product

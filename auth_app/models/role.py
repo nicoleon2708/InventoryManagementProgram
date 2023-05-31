@@ -19,7 +19,6 @@ class Role(models.Model):
     )
     description = models.TextField(max_length=500, blank=True)
 
-    permissions = models.ManyToManyField(Permission, blank=True, null=True)
 
     class Meta:
         db_table = "role"
@@ -27,4 +26,4 @@ class Role(models.Model):
         verbose_name_plural = "Roles"
 
     def __str__(self):
-        return f"Role({self.type_of_roles})"
+        return f"{self.type_of_roles}"

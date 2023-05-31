@@ -1,15 +1,17 @@
 import React from 'react'
-import Banner from './Banner'
-import AboutUs from './AboutUs'
+import Slider from './Slider'
 import Feature from './Feature'
 import Tracking from './Tracking'
+import Sync from './Sync'
+import Pricing from './Pricing'
 const Index = () => {
     return (
         <div>
-            <Banner />
-            <AboutUs />
+            <Slider />
             <Feature />
             <Tracking />
+            <Sync/>
+            <Pricing/>
         </div>
     )
 }

@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import Image from '../../assets/images/RegisterBackground.jpg'
 import { Link, useNavigate } from 'react-router-dom'
-import AuthService from '../../services/apis/auth/AuthService'
 import { toast } from 'react-toastify';
-import { useCookies } from 'react-cookie';
-
+import authService from '../../services/auth.service';
 const Login = () => {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-    const [token, setToken] = useCookies(['token'])
-    const [isLogin, setLogin] = useState(true);
     const navigate = useNavigate()
 
     const togglePassword = (e) => {
@@ -22,26 +18,19 @@ const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        AuthService.Login({ username, password })
-            .then(res => setToken('token', res.token),
-                toast.success("Login successful!"))
-            .catch(error => console.log(error))
+        authService.login(username, password)
+        .then(res=>console.log(res),
+        navigate('/home'))
+        .catch(err=>console.log(err))
 
     }
 
-    useEffect(() => {
-        if (token['token']) {
-            navigate('/home')
-        } else {
-            navigate('/login')
-        }
-    }, [token])
 
     return (
         <div>
-            <section className='bg-gray-50 min-h-screen flex items-center justify-center'>
+            <section className=' p-10 min-h-screen flex items-center justify-center'>
                 {/* Login container */}
-                <div className='bg-cyan-100 flex rounded-2xl shadow-lg max-3-xl p-5'>
+                <div className='bg-white flex max-3-xl pt-20 px-5'>
                     {/* form */}
 
                     <div className='md:w-1/2 px-16'>

@@ -5,8 +5,8 @@ from inventory.admin.tabinlines.location_in_line import LocationInLine
 
 
 class WarehouseAdmin(admin.ModelAdmin):
-    fields = ['name']
-    list_display = ['name', 'location_count']
+    fields = ['name', 'address', 'district', 'city', 'postal_code', 'company']
+    list_display = ['name', 'location_count', 'company']
 
     inlines = [LocationInLine]
 

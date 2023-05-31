@@ -1,6 +1,4 @@
 from django.urls import path, include
-# from django.conf.urls import url as u
-from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework import routers
 from auth_app.api.auth_viewset import AuthViewSet
 from auth_app.api.company_viewset import CompanyViewSet
@@ -25,7 +23,7 @@ router.register("partner", PartnerViewSet, basename='partner')
 
 
 urlpatterns = [
-    path('email-verification/', EmailVerificationView.as_view(), name='email-verification'),
+    path('email-verification/<token>/', EmailVerificationView.as_view(), name='email-verification'),
     path('reset-password/<uidb64>/<token>/', ResetPasswordView.as_view(), name='password-reset-confirm'),
     path('recovery-password/', RecoveryPasswordView.as_view(), name='recovery-password'),
     path('api/refresh-token/', TokenRefreshView.as_view(), name='token_refresh'),

@@ -3,33 +3,30 @@ from django.http import JsonResponse
 from rest_framework import viewsets
 from auth_app.serializers.company_serializer import CompanySerializer
 from auth_app.serializers.update_company_serializer import UpdateCompanySerializer
-# from auth_app.serializers.register_company_serializer import RegisterCompanySerializer
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
 from auth_app.permissions.is_owner_permission import IsOwnerPermission
 from auth_app.permissions.is_admin_permission import IsAdminPermission
-from auth_app.authentication import ExpiringTokenAuthentication
-from rest_framework.decorators import action, permission_classes, authentication_classes
-from django.shortcuts import get_object_or_404
-
+from rest_framework.decorators import action, permission_classes
+from rest_framework.permissions import IsAuthenticated
 
 class CompanyViewSet(viewsets.ModelViewSet):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
+    permission_classes = [IsOwnerPermission]
 
-    @permission_classes([IsAdminPermission | IsOwnerPermission])
     @action(methods=['PUT', 'PATCH'],
-            detail=False,
+            detail=True,
             url_path='update',
             serializer_class=UpdateCompanySerializer)
     def update_company(self, request, pk=None, *args, **kwargs):
-        company = Company.objects.get(pk=pk)
-        serializer = self.get_serializer(instance=company, data=request.data)
+        data = {}
+        pk = self.kwargs.get('pk')
+        serializer = self.get_serializer(data=request.data, context={'pk':pk})
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer.update_company()
+        data['message'] = "Update successful"
+        data['company'] = serializer.data
         return JsonResponse(
-            {
-                "message": "Update successfull",
-                "company": serializer.data
-            }
+            data=data,
+            status=status.HTTP_200_OK
         )
