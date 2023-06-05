@@ -9,6 +9,7 @@ def create_location(sender, instance, created, *args, **kwargs):
     # if warehouse instance create, a main location for that warehouse also be created
     if created:
         Location.objects.create(
+            name=instance.name+'/MainLocation',
             warehouse=instance,
             address=instance.address,
             postal_code = instance.postal_code,

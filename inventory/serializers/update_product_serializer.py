@@ -10,6 +10,7 @@ class UpdateProductSerializer(serializers.ModelSerializer):
     price = serializers.FloatField()
     image = serializers.ImageField()
     description = serializers.CharField(max_length=255)
+    barcode = serializers.CharField(max_length=255)
 
     class Meta:
         model = Product
@@ -51,5 +52,6 @@ class UpdateProductSerializer(serializers.ModelSerializer):
         instance.price = self.validated_data.get('price', instance.price)
         instance.image = self.validated_data.get('image', instance.image)
         instance.description = self.validated_data.get('description', instance.description)
+        instance.barcode = self.validated_data.get('barcode', instance.barcode)
         instance.save()
         return instance

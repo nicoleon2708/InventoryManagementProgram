@@ -17,6 +17,7 @@ class Product(models.Model):
         null=True
     )
     description = models.TextField(max_length=255, blank=True)
+    barcode = models.CharField(max_length=255, blank=True, null=True)
     company = models.ForeignKey(
         Company,
         on_delete=models.CASCADE,
@@ -33,4 +34,4 @@ class Product(models.Model):
 
 
     def __str__(self):
-        return f"Product{self.name}"
+        return f"{self.name}"

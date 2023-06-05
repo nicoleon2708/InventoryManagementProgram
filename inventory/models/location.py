@@ -3,6 +3,7 @@ from inventory.models.warehouse import Warehouse
 
 
 class Location(models.Model):
+    name = models.CharField(max_length=255, blank=True)
     address = models.CharField(max_length=255, blank=True)
     postal_code = models.CharField(max_length=255, blank=True)
     city = models.CharField(max_length=255, blank=True)
@@ -22,4 +23,4 @@ class Location(models.Model):
         verbose_name_plural = "Locations"
 
     def __str__(self):
-        return f"Location({self.address} - {self.city})"
+        return f"{self.name}"

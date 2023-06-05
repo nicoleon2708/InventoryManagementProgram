@@ -8,13 +8,18 @@ from inventory.serializers.product_serializer import ProductSerializer
 from inventory.serializers.create_product_serializer import CreateProductSerializer
 from inventory.serializers.update_product_serializer import UpdateProductSerializer
 from inventory.serializers.delete_product_serializer import DeleteProductSerializer
+from inventory.serializers.update_stock_product_serializer import UpdateStockProductSerializer
 from auth_app.permissions.is_admin_permission import IsAdminPermission
 from auth_app.permissions.is_owner_permission import IsOwnerPermission
-
+from rest_framework import filters
+from rest_framework.pagination import PageNumberPagination
 class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     permission_classes = [IsAdminPermission | IsOwnerPermission]
     parser_classes = (MultiPartParser, FormParser)
+    search_fields = ['name']
+    filter_backends =[filters.SearchFilter, filters.OrderingFilter]
+    pagination_class = PageNumberPagination
 
     def get_queryset(self):
         '''
@@ -40,6 +45,23 @@ class ProductViewSet(viewsets.ModelViewSet):
             status=status.HTTP_200_OK
         )
     
+    @action(methods=['PUT', 'PATCH'],
+            detail=True,
+            url_path='add_stock',
+            serializer_class=UpdateStockProductSerializer)
+    def add_stock_product(self, request, pk=None, *args, **kwargs):
+        pk = self.kwargs['pk']
+        data={}
+        serializer = self.get_serializer(data=request.data,
+                                         context={"pk": pk})
+        serializer.is_valid(raise_exception=True)
+        serializer.update_stock()
+        data['message'] = "Update stock successful"
+        return JsonResponse(
+            data=data,
+            status=status.HTTP_200_OK
+        )
+
     @action(methods=['PUT', 'PATCH'],
             detail=True,
             url_path='update',

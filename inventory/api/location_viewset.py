@@ -20,10 +20,9 @@ class LocationViewSet(viewsets.ModelViewSet):
             if user is superuser or admin it will return all the location exist
         '''
         user = self.request.user
-        list_warehouse = Warehouse.objects.filter(company=user.company)
-
         if user.is_superuser and user.is_staff:
             return Location.objects.all()
+        list_warehouse = Warehouse.objects.filter(company=user.company)
         return Location.objects.filter(warehouse__in=list_warehouse)
         
 

@@ -12,6 +12,7 @@ from inventory.admin.transfer import Transfer, TransferAdmin
 from inventory.admin.transfer_detail import TransferDetail, TransferDetailAdmin
 from inventory.admin.warehouse import Warehouse, WarehouseAdmin
 
+
 # Register your model
 admin.site.register(Company, CompanyAdmin)
 admin.site.register(GroupRule, GroupRuleAdmin)

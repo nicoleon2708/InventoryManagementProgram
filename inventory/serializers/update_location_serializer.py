@@ -13,6 +13,7 @@ class WarehousePrimaryKeyRelatedFieldBasedOnCurrentUser(serializers.PrimaryKeyRe
         return queryset.filter(company=request.user.company)
 
 class UpdateLocationSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(max_length=255)
     address = serializers.CharField(max_length=255)
     postal_code = serializers.CharField(max_length=255)
     city = serializers.CharField(max_length=255)
@@ -21,7 +22,7 @@ class UpdateLocationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Location
-        fields = ['id', 'address', 'postal_code', 'city', 'district', 'warehouse']
+        fields = ['id', 'name','address', 'postal_code', 'city', 'district', 'warehouse']
     
     def create(self, validated_data):
         return Location.objects.create(**validated_data)
@@ -37,6 +38,7 @@ class UpdateLocationSerializer(serializers.ModelSerializer):
 
     def update_location(self):
         instance = self.validated_data['location']
+        instance.name = self.validated_data.get('name', instance.name)
         instance.address = self.validated_data.get('address', instance.address)
         instance.postal_code = self.validated_data.get('address', instance.postal_code)
         instance.city = self.validated_data.get('address', instance.city)

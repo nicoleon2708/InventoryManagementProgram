@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from inventory.models.location import Location
-from inventory.models.company import Company
 from inventory.models.warehouse import Warehouse
+
 
 class WarehousePrimaryKeyRelatedFieldBasedOnCurrentUser(serializers.PrimaryKeyRelatedField):
     def get_queryset(self):
@@ -11,10 +11,12 @@ class WarehousePrimaryKeyRelatedFieldBasedOnCurrentUser(serializers.PrimaryKeyRe
             return None
         return queryset.filter(company=request.user.company)
 
+
 class CreateLocationSerializer(serializers.ModelSerializer):
     '''
         Create Location belong to warehouse
     '''
+    name = serializers.CharField(max_length=255)
     address = serializers.CharField(max_length=255)
     postal_code = serializers.CharField(max_length=255)
     city = serializers.CharField(max_length=255)
@@ -23,10 +25,11 @@ class CreateLocationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Location
-        fields = ['id', 'address' , 'postal_code', 'city', 'district', 'warehouse']
+        fields = ['id', 'name', 'address', 'postal_code', 'city', 'district', 'warehouse']
 
     def create(self, validated_data):
         location = Location.objects.create(
+            name=validated_data['name'],
             address=validated_data['address'],
             postal_code=validated_data['postal_code'],
             city=validated_data['city'],
@@ -35,4 +38,3 @@ class CreateLocationSerializer(serializers.ModelSerializer):
         )
         location.save()
         return location
-
