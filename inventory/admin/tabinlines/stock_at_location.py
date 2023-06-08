@@ -3,4 +3,4 @@ from inventory.models.location_stock import LocationStock
 
 class StockAtLocationInLine(admin.TabularInline):
     model = LocationStock
-    fields = ['product', 'location', 'stock']
+    fields = ['product', 'location', 'quantity']

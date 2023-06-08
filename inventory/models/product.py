@@ -1,5 +1,6 @@
 from django.db import models
 from inventory.models.company import Company
+from inventory.models.group_rule import GroupRule
 
 class Product(models.Model):
     def upload_to(instance, filename):
@@ -25,12 +26,18 @@ class Product(models.Model):
         null=True,
         blank=True
     )
+    group_rule = models.ForeignKey(
+        GroupRule,
+        on_delete=models.DO_NOTHING,
+        null=True,
+        blank=True,
+        related_name='products'
+    )
 
     class Meta:
         db_table = "product"
         verbose_name = "Product"
         verbose_name_plural = "Products"
-
 
 
     def __str__(self):

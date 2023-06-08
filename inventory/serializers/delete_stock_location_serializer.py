@@ -22,6 +22,6 @@ class DeleteStockLocationSerializer(serializers.ModelSerializer):
         stock = self.validated_data['stock']
         if stock.product:
             product = Product.objects.get(id=stock.product.id)
-            product.quantity -= stock.stock
+            product.quantity -= stock.quantity
             product.save()
         stock.delete()

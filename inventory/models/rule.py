@@ -10,9 +10,9 @@ class Rule(models.Model):
 
     class TypeChoice(models.TextChoices):
         get_stock_directly = (
-            "STRAIGHT", "If location A of Warehouse A have, get straight")
+            "STRAIGHT", "Take From Stock")
         get_stock_or_pull_from_location = (
-            "ANT_LC", "If location A don't have, get from location B")
+            "ANT_LC", "Take From Stock, If Unavailable, Trigger Another Rule")
 
     types_of_rule = models.CharField(
         max_length=255,
@@ -20,9 +20,42 @@ class Rule(models.Model):
         default=TypeChoice.get_stock_directly
     )
 
+    class ActionType(models.TextChoices):
+        pull_from = (
+            "PULL", "Pull From"
+        )
+        push_to = (
+            "PUSH", 'Push To'
+        )
+        push_and_pull = (
+            'PUSH_AND_PULL', 'Push and Pull'
+        )
+
+    action = models.CharField(
+        max_length=255,
+        choices=ActionType.choices,
+        default=ActionType.pull_from
+    )
+
+    destination_location = models.ForeignKey(
+        Location,
+        on_delete = models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='destination_location_rule'
+    )
+
+    source_location = models.ForeignKey(
+        Location,
+        on_delete = models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='source_location_rule'
+    )
+
     group = models.ForeignKey(
         GroupRule,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         related_name='rules',
         blank=True,
         null=True,
@@ -35,4 +68,4 @@ class Rule(models.Model):
         verbose_name_plural = "Rules"
 
     def __str__(self):
-        return f"Rule({self.name})"
+        return f"{self.name}"

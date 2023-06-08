@@ -1,7 +1,7 @@
 from django.db import models
 from inventory.models.product import Product
 from inventory.models.location import Location
-
+from inventory.models.rule import Rule
 
 class LocationStock(models.Model):
     location = models.ForeignKey(
