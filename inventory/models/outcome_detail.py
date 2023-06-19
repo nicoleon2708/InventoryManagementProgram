@@ -7,9 +7,17 @@ class OutcomeDetail(models.Model):
     outcome = models.ForeignKey(
         Outcome,
         on_delete=models.CASCADE,
-        related_name="order_detail"
+        related_name="order_detail",
+        null=True,
+        blank=True
     )
-    product = models.ManyToManyField(Product)
+    product = models.ForeignKey(
+        Product,
+        related_name='outcomes',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
     quantity = models.IntegerField(default=0, blank=True, null=True)
     price = models.FloatField(default=0, blank=True, null=True)
     unit = models.CharField(max_length=255, blank=True)
@@ -20,4 +28,4 @@ class OutcomeDetail(models.Model):
         verbose_name_plural = "Outcome details"
 
     def __str__(self):
-        return f"Outcome{self}"
+        return f"{self.outcome} - {self.product} - {self.quantity} - {self.price}"

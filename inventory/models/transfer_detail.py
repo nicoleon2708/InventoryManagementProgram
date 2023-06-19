@@ -4,7 +4,13 @@ from inventory.models.transfer import Transfer
 
 
 class TransferDetail(models.Model):
-    product = models.ManyToManyField(Product)
+    product = models.ForeignKey(
+        Product,
+        related_name='transfer_detail',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE
+    )
     transfer = models.ForeignKey(
         Transfer,
         on_delete=models.CASCADE,
@@ -36,10 +42,11 @@ class TransferDetail(models.Model):
     note = models.TextField(max_length=500, blank=True)
     transportation_type = models.CharField(max_length=100, blank=True)
 
+
     class Meta:
         db_table = "transfer_detail"
         verbose_name = "Transfer Detail"
         verbose_name_plural = "Transfer Details"
 
     def __str__(self):
-        return f"TransferDetail{self}"
+        return f"{self.transfer} - {self.product}"

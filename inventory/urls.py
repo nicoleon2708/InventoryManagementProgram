@@ -6,12 +6,18 @@ from inventory.api.warehouse_viewset import WarehouseViewSet
 from inventory.api.location_viewset import LocationViewSet
 from inventory.api.location_stock_viewset import LocationStockViewSet
 from inventory.api.rule_viewset import RuleViewSet
+from inventory.api.group_rule_viewset import GroupRuleViewSet
+from inventory.api.transfer_viewset import TransferViewSet
+
+
 router = routers.DefaultRouter()
 router.register('warehouse', WarehouseViewSet, basename='warehouse')
 router.register('product', ProductViewSet, basename='product')
 router.register('location', LocationViewSet, basename='location')
 router.register('stock', LocationStockViewSet, basename='location_stock')
 router.register('rule', RuleViewSet, basename='rule_stocks')
+router.register('group_rule', GroupRuleViewSet, basename='group_rule')
+router.register('transfer', TransferViewSet, basename='transfer')
 
 app_name = "inventory"
 urlpatterns = [

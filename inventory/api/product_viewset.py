@@ -13,6 +13,9 @@ from auth_app.permissions.is_admin_permission import IsAdminPermission
 from auth_app.permissions.is_owner_permission import IsOwnerPermission
 from rest_framework import filters
 from rest_framework.pagination import PageNumberPagination
+from inventory.serializers.set_group_rule_product_serializer import SetGroupRuleProductSerializer
+
+
 class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     permission_classes = [IsAdminPermission | IsOwnerPermission]
@@ -99,8 +102,21 @@ class ProductViewSet(viewsets.ModelViewSet):
             status=status.HTTP_200_OK
         )
 
-
-
+    @action(methods=['POST'],
+            url_path='set_group_rule',
+            detail=True,
+            serializer_class=SetGroupRuleProductSerializer)
+    def set_group_rule(self, request, pk=None, *args, **kwargs):
+        pk = self.kwargs['pk']
+        data = {}
+        serializer = self.get_serializer(data=request.data, context={'pk':pk})
+        serializer.is_valid(raise_exception=True)
+        serializer.set_group_rule()
+        data['message'] = "Group rule has been set successful"
+        return JsonResponse(
+            data=data,
+            status=status.HTTP_200_OK\
+        )
     
 
 

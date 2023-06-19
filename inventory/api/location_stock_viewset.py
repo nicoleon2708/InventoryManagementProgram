@@ -45,7 +45,7 @@ class LocationStockViewSet(viewsets.ModelViewSet):
         data = {}
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.add_stock_location()
+        serializer.add_stock_product()
         data['message'] = "Add stock successful"
         return JsonResponse(
             data=data,

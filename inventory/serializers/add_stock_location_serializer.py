@@ -5,6 +5,7 @@ from inventory.models.warehouse import Warehouse
 from inventory.models.location_stock import LocationStock
 from inventory.models.location import Location
 
+
 class ProductBasedOnCurrentUser(serializers.PrimaryKeyRelatedField):
     def get_queryset(self):
         request = self.context.get('request', None)
@@ -14,6 +15,7 @@ class ProductBasedOnCurrentUser(serializers.PrimaryKeyRelatedField):
         if request.user.is_superuser and request.user.is_staff:
             return queryset.all()
         return queryset.filter(company=request.user.company)
+
 
 class LocationBasedOnCurrentUser(serializers.PrimaryKeyRelatedField):
     def get_queryset(self):
@@ -28,39 +30,33 @@ class LocationBasedOnCurrentUser(serializers.PrimaryKeyRelatedField):
             return queryset.none()
         return queryset.filter(warehouse__in=warehouse_list)
 
+
 class AddStockLocationSerializer(serializers.ModelSerializer):
     product = ProductBasedOnCurrentUser(queryset=Product.objects)
     location = LocationBasedOnCurrentUser(queryset=Location.objects)
     quantity = serializers.IntegerField(default=0)
 
     class Meta:
-        model = LocationStock   
+        model = LocationStock
         fields = ['id', 'product', 'location', 'quantity']
         depth = 1
 
     def validate_quantity(self, value):
-        if(value<0):
-            raise ValidationError("This quantity can not have a negative number")
+        if (value < 0):
+            raise ValidationError(
+                "This quantity can not have a negative number")
         return value
 
     def add_stock_product(self):
         product = self.validated_data['product']
         location = self.validated_data['location']
-        stock = self.validated_data['stock']
+        quantity = self.validated_data['quantity']
         stock = LocationStock.objects.create(
             product=product,
             location=location,
-            stock=stock
+            quantity=quantity
         )
         stock.save()
-        product.quantity += stock.stock
+        product.quantity += stock.quantity
         product.save()
         return stock
-
-
-
-    
-
-        
-
-
