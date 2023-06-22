@@ -4,4 +4,4 @@ from inventory.models.rule import Rule
 
 class RuleOfGroup(admin.TabularInline):
     model = Rule
-    fields = ['name', 'action', 'source_location', 'destination_location', 'types_of_rule']
+    fields = ['name', 'source_location', 'destination_location', 'types_of_rule']

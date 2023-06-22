@@ -28,7 +28,7 @@ class Product(models.Model):
     )
     group_rule = models.ForeignKey(
         GroupRule,
-        on_delete=models.DO_NOTHING,
+        on_delete=models.SET_NULL,
         null=True,
         blank=True,
         related_name='products'

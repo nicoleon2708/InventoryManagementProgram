@@ -21,12 +21,12 @@ class Transfer(models.Model):
         blank=True,
         null=True
     )
-    warehouse = models.ForeignKey(
-        Warehouse,
+    source_location = models.ForeignKey(
+        Location,
         on_delete=models.CASCADE,
-        related_name='transfers',
         null=True,
-        blank=True
+        blank=True,
+        related_name='transfers'
     )
     destination_location = models.ForeignKey(
         Location,
@@ -43,4 +43,4 @@ class Transfer(models.Model):
         verbose_name_plural = "Transfers"
 
     def __str__(self):
-        return f"{self.user} - {self.outcome} - {self.warehouse}"
+        return f"{self.user} - {self.outcome}"

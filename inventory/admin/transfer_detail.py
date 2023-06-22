@@ -3,7 +3,6 @@ from django.contrib import admin
 
 
 class TransferDetailAdmin(admin.ModelAdmin):
-    list_display = ['transfer', 'method',
-                    'scheduled_time', 'note', 'transportation_type']
+    list_display = ['transfer', 'product', 'quantity', 'status']
 
 

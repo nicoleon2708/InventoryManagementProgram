@@ -1,6 +1,7 @@
 from django.db import models
 from auth_app.models.user import User
 from inventory.models.partner import Partner
+from inventory.models.warehouse import Warehouse
 from django.conf import settings
 
 
@@ -25,7 +26,6 @@ class Outcome(models.Model):
         blank=True,
         null=True
     )
-
     class StatusChoice(models.TextChoices):
         on_pending = ("PENDING", "On Pending"),
         received = ("RECEIVED", "Received"),
@@ -38,6 +38,13 @@ class Outcome(models.Model):
         default=StatusChoice.on_pending,
         blank=True
     )
+    warehouse = models.ForeignKey(
+        Warehouse,
+        on_delete=models.CASCADE,
+        related_name='outcomes',
+        null=True,
+        blank=True
+    )    
 
     class Meta:
         db_table = "outcome"

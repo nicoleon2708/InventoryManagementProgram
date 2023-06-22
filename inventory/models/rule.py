@@ -20,23 +20,6 @@ class Rule(models.Model):
         default=TypeChoice.get_stock_directly
     )
 
-    class ActionType(models.TextChoices):
-        pull_from = (
-            "PULL", "Pull From"
-        )
-        push_to = (
-            "PUSH", 'Push To'
-        )
-        push_and_pull = (
-            'PUSH_AND_PULL', 'Push and Pull'
-        )
-
-    action = models.CharField(
-        max_length=255,
-        choices=ActionType.choices,
-        default=ActionType.pull_from
-    )
-
     destination_location = models.ForeignKey(
         Location,
         on_delete = models.CASCADE,

@@ -1,5 +1,6 @@
 from django.db import models
 from inventory.models.warehouse import Warehouse
+from inventory.models.partner import Partner
 
 
 class Location(models.Model):
@@ -13,6 +14,14 @@ class Location(models.Model):
         Warehouse,
         on_delete=models.CASCADE,
         related_name="locations",
+        blank=True,
+        null=True
+    )
+
+    partner = models.ForeignKey(
+        Partner,
+        on_delete=models.CASCADE,
+        related_name='locations',
         blank=True,
         null=True
     )
