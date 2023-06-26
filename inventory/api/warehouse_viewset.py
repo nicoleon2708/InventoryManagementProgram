@@ -1,8 +1,7 @@
-from rest_framework import viewsets
-from rest_framework import status
-from django.shortcuts import get_object_or_404
+from rest_framework import viewsets, status, filters
+from django_filters.rest_framework import DjangoFilterBackend
 from inventory.models.warehouse import Warehouse
-from rest_framework.decorators import action, permission_classes
+from rest_framework.decorators import action
 from inventory.serializers.create_warehouse_serializer import CreateWarehouseSerializer
 from django.http import JsonResponse
 from inventory.serializers.update_warehouse_serializer import UpdateWarehouseSerializer
@@ -10,10 +9,19 @@ from inventory.serializers.delete_warehouse_serializer import DeleteWarehouseSer
 from inventory.serializers.warehouse_serializer import WarehouseSerializer
 from auth_app.permissions.is_owner_permission import IsOwnerPermission
 from auth_app.permissions.is_admin_permission import IsAdminPermission
+from inventory.pagination import CustomPagination
+from inventory.filters.warehouse_filter import WarehouseFilter
+
 
 class WarehouseViewSet(viewsets.ModelViewSet):
     serializer_class = WarehouseSerializer
     permission_classes = [IsOwnerPermission | IsAdminPermission]
+    pagination_class = CustomPagination
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    filterset_class = WarehouseFilter
+    search_fields = ['name']
+    ordering_fields = ['id', 'name']
+
 
     def get_queryset(self):
         '''
@@ -48,7 +56,6 @@ class WarehouseViewSet(viewsets.ModelViewSet):
             serializer_class=UpdateWarehouseSerializer)
     def update_warehouse(self, request, pk=None, *args, **kwargs):
         data = {}
-        pk = self.kwargs.get('pk')
         warehouse = Warehouse.objects.get(pk=pk)
         serializer = self.get_serializer(instance=warehouse, 
                                          data=request.data,
@@ -71,7 +78,6 @@ class WarehouseViewSet(viewsets.ModelViewSet):
             )
     def delete_warehouse(self, request, pk=None, *args, **kwargs):
         data = {}
-        pk = self.kwargs.get('pk')
         serializer = self.get_serializer(data=request.data, context={"pk":pk})
         serializer.is_valid(raise_exception=True)
         serializer.delete_warehouse()
