@@ -1,29 +1,25 @@
 from django.http import JsonResponse
-from rest_framework import viewsets, status, filters
+from rest_framework import viewsets, status
 from rest_framework.decorators import action
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.validators import ValidationError
-from auth_app.permissions.is_admin_permission import IsAdminPermission
-from auth_app.permissions.is_owner_permission import IsOwnerPermission
 from inventory.models.outcome import Outcome
-from inventory.models.location import Location
-from inventory.models.transfer import Transfer
 from inventory.serializers.outcome_serializer import OutcomeSerializer
 from inventory.serializers.create_outcome_serializer import CreateOutcomeSerializer
 from inventory.serializers.update_outcome_serializer import UpdateOutcomeSerializer
 from inventory.serializers.delete_outcome_serializer import DeleteOutcomeSerializer
 from inventory.services.outcome_service import OutcomeService
 from inventory.services.transfer_service import TransferService
+from inventory.filters.outcome_filter import OutcomeFilter
+from inventory.api.inventory_standard_viewset import InventoryStandardViewSet
 from functools import reduce
 from copy import deepcopy
 
 
-class OutcomeViewSet(viewsets.ModelViewSet):
+class OutcomeViewSet(InventoryStandardViewSet):
     queryset = Outcome.objects.all()
     serializer_class = OutcomeSerializer
-    permission_classes = [IsOwnerPermission | IsAdminPermission]
-    pagination_class = PageNumberPagination
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    filterset_class = OutcomeFilter
+    ordering_fields = ['id', 'created_date']
 
     def get_queryset(self):
         '''
@@ -59,7 +55,6 @@ class OutcomeViewSet(viewsets.ModelViewSet):
                 else:
                     raise ValidationError("No suitable rules for this warehouse")
 
-
         data['message'] = 'Create outcome successful'
         return JsonResponse(
             data=data,
@@ -72,7 +67,8 @@ class OutcomeViewSet(viewsets.ModelViewSet):
             serializer_class=UpdateOutcomeSerializer)
     def update_outcome(self, request, pk=None, *args, **kwargs):
         data = {}
-        serializer = self.get_serializer(data=request.data, context={'pk':pk})
+        serializer = self.get_serializer(data=request.data, context={'pk':pk,
+                                                                     'request':request})
         serializer.is_valid(raise_exception=True)
         serializer.update_outcome()
         data['message'] = 'Update outcome successful'
@@ -87,7 +83,8 @@ class OutcomeViewSet(viewsets.ModelViewSet):
             serializer_class=DeleteOutcomeSerializer)
     def delete_outcome(self, request, pk=None, *args, **kwargs):
         data = {}
-        serializer = self.get_serializer(data=request.data, context={'pk': pk})
+        serializer = self.get_serializer(data=request.data, context={'pk': pk,
+                                                                     'request':request})
         serializer.is_valid(raise_exception=True)
         serializer.delete_outcome()
         data['message'] = 'Delete successful'

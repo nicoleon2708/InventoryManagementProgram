@@ -1,18 +1,25 @@
-from rest_framework import viewsets
-from rest_framework import status
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import viewsets, status
 from rest_framework.decorators import action
+from inventory.pagination import CustomPagination
 from inventory.models.location import Location
 from inventory.models.warehouse import Warehouse
 from inventory.serializers.location_serializer import LocationSerializer
 from inventory.serializers.create_location_serializer import CreateLocationSerializer
 from inventory.serializers.update_location_serializer import UpdateLocationSerializer
 from inventory.serializers.delete_location_serializer import DeleteLocationSerializer
+from inventory.serializers.update_external_outcome_warehouse_serializer import UpdateExternalOutcomeSerializer
 from django.http import JsonResponse
-from auth_app.permissions.is_owner_permission import IsOwnerPermission
-from auth_app.permissions.is_admin_permission import IsAdminPermission
-class LocationViewSet(viewsets.ModelViewSet):
+from inventory.filters.location_filter import LocationFilter
+from inventory.api.inventory_standard_viewset import InventoryStandardViewSet
+
+
+class LocationViewSet(InventoryStandardViewSet):
     serializer_class = LocationSerializer
-    permission_classes = [IsOwnerPermission | IsAdminPermission]
+    search_fields = ['name']
+    ordering_fields = ['id', 'name']
+    filterset_class = LocationFilter
+
 
     def get_queryset(self):
         '''
@@ -49,9 +56,9 @@ class LocationViewSet(viewsets.ModelViewSet):
             detail=True,
             serializer_class=UpdateLocationSerializer)
     def update_location(self, request, pk=None,*args, **kwargs):
-        pk = self.kwargs['pk']
         data = {}
-        serializer = self.get_serializer(data=request.data, context={'pk':pk})
+        serializer = self.get_serializer(data=request.data, context={'pk':pk,
+                                                                    'request': request})
         serializer.is_valid(raise_exception=True)
         serializer.update_location()
         data['messages'] = "Update successful"
@@ -68,8 +75,8 @@ class LocationViewSet(viewsets.ModelViewSet):
             serializer_class=DeleteLocationSerializer)
     def delete_location(self, request, pk=None, *args, **kwargs):
         data = {}
-        pk = self.kwargs.get('pk')
-        serializer = self.get_serializer(data=request.data, context={'pk':pk})
+        serializer = self.get_serializer(data=request.data, context={'pk':pk,
+                                                                    'request': request})
         serializer.is_valid(raise_exception=True)
         serializer.delete_location()
         data['messages'] = "Delete location successful"
@@ -78,4 +85,18 @@ class LocationViewSet(viewsets.ModelViewSet):
             status=status.HTTP_200_OK
         )
     
-
+    @action(methods=['PUT'],
+        detail=True,
+        url_path='update_external',
+        serializer_class=UpdateExternalOutcomeSerializer)
+    def update_external_outcome(self, request, pk=None, *args, **kwargs):
+        data = {}
+        serializer = self.get_serializer(data=request.data, context={'pk':pk,
+                                                                    'request': request})
+        serializer.is_valid(raise_exception=True)
+        serializer.update_external_outcome()
+        data['message'] = 'Update successful'
+        return JsonResponse(
+            data=data,
+            status=status.HTTP_200_OK
+        )

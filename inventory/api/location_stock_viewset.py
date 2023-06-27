@@ -9,17 +9,16 @@ from inventory.models.warehouse import Warehouse
 from inventory.models.location import Location
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
-from auth_app.permissions.is_owner_permission import IsOwnerPermission
-from auth_app.permissions.is_admin_permission import IsAdminPermission
 from inventory.services.location_stock_service import LocationStockService
 from django.http import JsonResponse
+from inventory.filters.location_stock_filter import LocationStockFilter
+from inventory.api.inventory_standard_viewset import InventoryStandardViewSet
 
 
-class LocationStockViewSet(viewsets.ModelViewSet):
+class LocationStockViewSet(InventoryStandardViewSet):
     serializer_class = LocationStockSerializer
-    permission_classes = [IsAdminPermission | IsOwnerPermission]
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['location', 'product']
+    filterset_class = LocationStockFilter
+    ordering_fields = ['id', 'quantity']
 
     def get_queryset(self):
         '''
@@ -57,10 +56,10 @@ class LocationStockViewSet(viewsets.ModelViewSet):
             detail=True,
             url_path='delete',
             serializer_class=DeleteStockLocationSerializer)
-    def delete_stock_location(self, request, *args, **kwargs):
+    def delete_stock_location(self, request, pk=None,*args, **kwargs):
         data = {}
-        pk = self.kwargs['pk']
-        serializer = self.get_serializer(data=request.data, context={'pk': pk})
+        serializer = self.get_serializer(data=request.data, context={'pk': pk,
+                                                                     'request':request})
         serializer.is_valid(raise_exception=True)
         serializer.delete_stock()
         data['message'] = 'Delete successful'
@@ -76,34 +75,14 @@ class LocationStockViewSet(viewsets.ModelViewSet):
             serializer_class=SubstractStockSerializer)
     def substract_stock(self, request, pk=None, *args, **kwargs):
         data = {}
-        pk = self.kwargs['pk']
-        serializer = self.get_serializer(data=request.data, context={'pk':pk})
+        serializer = self.get_serializer(data=request.data, context={'pk':pk,
+                                                                     'request':request})
         serializer.is_valid(raise_exception=True)
         LocationStockService.substract_stock(
             location_stock = serializer.validated_data.get('stock'), 
             sub_quantity = serializer.validated_data.get('sub_quantity')
         )
         data['message'] = "Substract successful"
-        return JsonResponse(
-            data=data,
-            status=status.HTTP_200_OK
-        )
-
-     
-    @action(methods=['POST'],
-            url_path='transfer',
-            detail=False,
-            serializer_class=TransferStockSerializer)
-    def transfer_stock(self, request, pk=None,*args, **kwargs):
-        data = {}
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        LocationStockService.transfer_stock(
-            location_stock = serializer.validated_data.get('location_stock'),
-            location= serializer.validated_data.get('location'),
-            quantity= serializer.validated_data.get('quantity')
-        )
-        data['transfer'] = 'Transfer stock successful'
         return JsonResponse(
             data=data,
             status=status.HTTP_200_OK

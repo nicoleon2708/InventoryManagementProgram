@@ -5,11 +5,20 @@ from inventory.serializers.transfer_serializer import TransferSerializer
 from inventory.serializers.confirm_stock_transfer_serializer import ConfirmStockTransferSerializer
 from inventory.models.transfer import Transfer
 from inventory.services.transfer_service import TransferService
+from inventory.filters.transfer_filter import TransferFilter
+from inventory.api.inventory_standard_viewset import InventoryStandardViewSet
 
 
-class TransferViewSet(viewsets.ModelViewSet):
-    queryset = Transfer.objects.all()
+class TransferViewSet(InventoryStandardViewSet):
     serializer_class = TransferSerializer
+    ordering_fields = ['id']
+    filterset_class = TransferFilter
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_superuser and user.is_staff:
+            return Transfer.objects.all()
+        return Transfer.objects.filter(user=user)
 
     @action(methods=['POST'],
             url_path='confirm',

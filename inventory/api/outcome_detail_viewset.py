@@ -1,17 +1,18 @@
 from django.http import JsonResponse
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
-from auth_app.permissions.is_admin_permission import IsAdminPermission
-from auth_app.permissions.is_owner_permission import IsOwnerPermission
 from inventory.models.outcome_detail import OutcomeDetail
 from inventory.serializers.outcome_detail_serializer import OutcomeDetailSerializer
 from inventory.serializers.add_product_outcome_serializer import AddProductOutcomeSerializer
 from inventory.serializers.remove_product_quantity_outcome_serializer import RemoveProductQuantityOutcomeSerializer
+from inventory.filters.outcome_detail_filter import OutcomeDetailFilter
+from inventory.api.inventory_standard_viewset import InventoryStandardViewSet
 
 
-class OutcomeDetailViewSet(viewsets.ModelViewSet):
+class OutcomeDetailViewSet(InventoryStandardViewSet):
     serializer_class = OutcomeDetailSerializer
-    permission_classes = [IsAdminPermission | IsOwnerPermission]
+    ordering = ['id']
+    filterset_class = OutcomeDetailFilter
 
     def get_queryset(self):
         '''
@@ -45,7 +46,8 @@ class OutcomeDetailViewSet(viewsets.ModelViewSet):
             serializer_class=RemoveProductQuantityOutcomeSerializer)
     def remove_product_quantity(self, request, pk=None, *args, **kwargs):
         data = {}
-        serializer = self.get_serializer(data=request.data, context={'pk':pk})
+        serializer = self.get_serializer(data=request.data, context={'pk':pk,
+                                                                     'request':request})
         serializer.is_valid(raise_exception=True)
         serializer.remove_product_quantity()
         data['message'] = 'Remove quantity successful'

@@ -5,15 +5,16 @@ from inventory.serializers.partner_serializer import PartnerSerializer
 from inventory.serializers.register_partner_serializer import RegisterPartnerSerializer
 from inventory.serializers.update_partner_serializer import UpdatePartnerSerializer
 from inventory.serializers.delete_partner_serializer import DeletePartnerSerializer
-from auth_app.permissions.is_admin_permission import IsAdminPermission
-from auth_app.permissions.is_owner_permission import IsOwnerPermission
 from inventory.models.partner import Partner
+from inventory.api.inventory_standard_viewset import InventoryStandardViewSet
 
 
-class PartnerViewSet(viewsets.ModelViewSet):
+class PartnerViewSet(InventoryStandardViewSet):
     queryset = Partner.objects.all()
     serializer_class = PartnerSerializer
-    permission_classes = [IsOwnerPermission | IsAdminPermission]
+    search_fields = ['name']
+    ordering_fields = ['id', 'name']
+
 
     def get_queryset(self):
         '''
@@ -47,8 +48,8 @@ class PartnerViewSet(viewsets.ModelViewSet):
             serializer_class=UpdatePartnerSerializer)
     def update_partner(self, request, pk=None, *args, **kwargs):
         data = {}
-        pk = self.kwargs['pk']
-        serializer = self.get_serializer(data=request.data, context={'pk': pk})
+        serializer = self.get_serializer(data=request.data, context={'pk': pk,
+                                                                     'request':request})
         serializer.is_valid(raise_exception=True)
         serializer.update_partner()
         data['message'] = 'Update successful'
@@ -63,8 +64,8 @@ class PartnerViewSet(viewsets.ModelViewSet):
             serializer_class=DeletePartnerSerializer)
     def delete_partner(self, request, pk=None, *args, **kwargs):
         data = {}
-        pk = self.kwargs['pk']
-        serializer = self.get_serializer(data=request.data, context={'pk':pk})
+        serializer = self.get_serializer(data=request.data, context={'pk':pk,
+                                                                     'request':request})
         serializer.is_valid(raise_exception=True)
         serializer.delete_partner()
         data['message'] = 'Delete partner sucessful'
