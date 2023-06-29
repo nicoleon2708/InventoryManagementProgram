@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from inventory.models.group_rule import GroupRule
 from inventory.serializers.rule_serializer import RuleSerializer
 
@@ -8,4 +9,4 @@ class GroupRuleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = GroupRule
-        fields = '__all__'
+        fields = "__all__"

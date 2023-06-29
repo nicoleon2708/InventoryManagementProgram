@@ -1,5 +1,6 @@
-from django.db import models
 from django.conf import settings
+from django.db import models
+
 # Create Company Model
 
 
@@ -15,9 +16,9 @@ class Company(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='company',
+        related_name="company",
         blank=True,
-        null=True
+        null=True,
     )
 
     class Meta:

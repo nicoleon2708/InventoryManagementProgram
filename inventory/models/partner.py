@@ -1,5 +1,5 @@
-from django.db import models
 from django.conf import settings
+from django.db import models
 
 
 class Partner(models.Model):
@@ -12,10 +12,10 @@ class Partner(models.Model):
     district = models.CharField(max_length=255, blank=True)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        related_name='partners',
+        related_name="partners",
         on_delete=models.CASCADE,
         blank=True,
-        null=True
+        null=True,
     )
 
     class Meta:

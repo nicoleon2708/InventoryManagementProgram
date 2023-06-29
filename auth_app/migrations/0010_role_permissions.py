@@ -4,16 +4,15 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('auth', '0012_alter_user_first_name_max_length'),
-        ('auth_app', '0009_alter_user_role'),
+        ("auth", "0012_alter_user_first_name_max_length"),
+        ("auth_app", "0009_alter_user_role"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='role',
-            name='permissions',
-            field=models.ManyToManyField(blank=True, null=True, to='auth.permission'),
+            model_name="role",
+            name="permissions",
+            field=models.ManyToManyField(blank=True, null=True, to="auth.permission"),
         ),
     ]

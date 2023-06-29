@@ -1,10 +1,13 @@
+import random
+
+import requests
+from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.conf import settings
+
 from inventory.models.company import Company
-from django.contrib.auth.mixins import LoginRequiredMixin
-import requests
-import random
+
 """
     When the User model is saved, a signal is fired called
     register_company which creates a Company instance with a foreign key
@@ -25,7 +28,5 @@ def register_company(sender, instance, created, *args, **kwargs):
             address=instance.address,
             postal_code=instance.postal_code,
             district=instance.district,
-            city=instance.city)
-            
-
-
+            city=instance.city,
+        )

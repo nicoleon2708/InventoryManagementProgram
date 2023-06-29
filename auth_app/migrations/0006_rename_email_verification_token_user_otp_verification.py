@@ -4,15 +4,14 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('auth_app', '0005_user_address_user_city_user_company_name_and_more'),
+        ("auth_app", "0005_user_address_user_city_user_company_name_and_more"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='user',
-            old_name='email_verification_token',
-            new_name='otp_verification',
+            model_name="user",
+            old_name="email_verification_token",
+            new_name="otp_verification",
         ),
     ]

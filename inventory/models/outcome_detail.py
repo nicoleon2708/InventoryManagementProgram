@@ -1,4 +1,5 @@
 from django.db import models
+
 from inventory.models.outcome import Outcome
 from inventory.models.product import Product
 
@@ -9,14 +10,14 @@ class OutcomeDetail(models.Model):
         on_delete=models.CASCADE,
         related_name="order_detail",
         null=True,
-        blank=True
+        blank=True,
     )
     product = models.ForeignKey(
         Product,
-        related_name='outcomes',
+        related_name="outcomes",
         on_delete=models.CASCADE,
         null=True,
-        blank=True
+        blank=True,
     )
     quantity = models.IntegerField(default=0, blank=True, null=True)
     price = models.FloatField(default=0, blank=True, null=True)

@@ -1,13 +1,13 @@
-from inventory.models.partner import Partner
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 
+from inventory.models.partner import Partner
+
 
 class RegisterPartnerSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Partner
-        fields = '__all__'
+        fields = "__all__"
 
     def validate_phone(self, value):
         if len(value) != 10:

@@ -1,10 +1,11 @@
-from rest_framework.permissions import BasePermission, IsAuthenticated, SAFE_METHODS
 from rest_framework import permissions
+from rest_framework.permissions import (SAFE_METHODS, BasePermission,
+                                        IsAuthenticated)
 
 
 class IsAdminPermission(BasePermission):
     """
-        Custom Admin permission, allow admin and superuser to manage all of users, companies, locations
+    Custom Admin permission, allow admin and superuser to manage all of users, companies, locations
     """
 
     message = "Only Admin and superuser can access"
@@ -14,8 +15,8 @@ class IsAdminPermission(BasePermission):
             return True
 
     def has_object_permission(self, request, view, obj):
-        if request.user.is_staff and request.user.role.type_of_roles == 'ADMIN':
+        if request.user.is_staff and request.user.role.type_of_roles == "ADMIN":
             return True
-        if request.user.is_superuser and request.user.role.type_of_roles == 'SUPERUSER':
+        if request.user.is_superuser and request.user.role.type_of_roles == "SUPERUSER":
             return True
         return False

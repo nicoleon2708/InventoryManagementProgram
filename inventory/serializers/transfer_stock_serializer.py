@@ -1,12 +1,14 @@
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
-from inventory.models.location_stock import LocationStock
+
 from inventory.models.location import Location
+from inventory.models.location_stock import LocationStock
 from inventory.models.warehouse import Warehouse
+
 
 class LocationBasedOnCurrentUser(serializers.PrimaryKeyRelatedField):
     def get_queryset(self):
-        request = self.context.get('request', None)
+        request = self.context.get("request", None)
         queryset = super(LocationBasedOnCurrentUser, self).get_queryset()
         if not request or not queryset:
             return None
@@ -15,12 +17,12 @@ class LocationBasedOnCurrentUser(serializers.PrimaryKeyRelatedField):
         warehouse_list = Warehouse.objects.filter(company=request.user.company)
         if not warehouse_list:
             return queryset.none()
-        return queryset.filter(warehouse__in=warehouse_list) 
+        return queryset.filter(warehouse__in=warehouse_list)
 
 
 class LocationStockBasedOnCurrentUser(serializers.PrimaryKeyRelatedField):
     def get_queryset(self):
-        request = self.context.get('request', None)
+        request = self.context.get("request", None)
         queryset = super(LocationStockBasedOnCurrentUser, self).get_queryset()
         if not request or not queryset:
             return None
@@ -30,7 +32,8 @@ class LocationStockBasedOnCurrentUser(serializers.PrimaryKeyRelatedField):
         if not warehouse_list:
             return queryset.none()
         location_list = Location.objects.filter(warehouse__in=warehouse_list)
-        return queryset.filter(location__in=location_list)    
+        return queryset.filter(location__in=location_list)
+
 
 class TransferStockSerializer(serializers.ModelSerializer):
     location_stock = LocationStockBasedOnCurrentUser(queryset=LocationStock.objects)
@@ -39,12 +42,12 @@ class TransferStockSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = LocationStock
-        fields = ['id', 'location_stock', 'location', 'quantity']
+        fields = ["id", "location_stock", "location", "quantity"]
 
     def validate(self, data):
-        location_stock = data['location_stock']
-        if data['quantity'] > location_stock.quantity:
+        location_stock = data["location_stock"]
+        if data["quantity"] > location_stock.quantity:
             raise ValidationError("Out of limit stocks")
         if location_stock.quantity == 0:
-            raise ValidationError("This product is out of stock!")  
+            raise ValidationError("This product is out of stock!")
         return data

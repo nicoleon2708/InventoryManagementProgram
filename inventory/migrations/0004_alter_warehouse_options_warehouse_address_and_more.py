@@ -4,34 +4,33 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('inventory', '0003_rename_contact_name_company_last_name_and_more'),
+        ("inventory", "0003_rename_contact_name_company_last_name_and_more"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='warehouse',
-            options={'verbose_name': 'Warehouse', 'verbose_name_plural': 'Warehouses'},
+            name="warehouse",
+            options={"verbose_name": "Warehouse", "verbose_name_plural": "Warehouses"},
         ),
         migrations.AddField(
-            model_name='warehouse',
-            name='address',
+            model_name="warehouse",
+            name="address",
             field=models.CharField(blank=True, max_length=255),
         ),
         migrations.AddField(
-            model_name='warehouse',
-            name='city',
+            model_name="warehouse",
+            name="city",
             field=models.CharField(blank=True, max_length=255),
         ),
         migrations.AddField(
-            model_name='warehouse',
-            name='district',
+            model_name="warehouse",
+            name="district",
             field=models.CharField(blank=True, max_length=255),
         ),
         migrations.AddField(
-            model_name='warehouse',
-            name='postal_code',
+            model_name="warehouse",
+            name="postal_code",
             field=models.CharField(blank=True, max_length=255),
         ),
     ]

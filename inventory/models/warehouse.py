@@ -1,5 +1,7 @@
 from django.db import models
+
 from inventory.models.company import Company
+
 
 class Warehouse(models.Model):
     name = models.CharField(max_length=100, blank=True)
@@ -10,15 +12,15 @@ class Warehouse(models.Model):
     company = models.ForeignKey(
         Company,
         on_delete=models.CASCADE,
-        related_name='warehouses',
+        related_name="warehouses",
         blank=True,
-        null=True
+        null=True,
     )
 
     class Meta:
         db_table = "warehouse"
-        verbose_name = 'Warehouse'
-        verbose_name_plural = 'Warehouses'
+        verbose_name = "Warehouse"
+        verbose_name_plural = "Warehouses"
 
     def __str__(self):
         return f"{self.name}"

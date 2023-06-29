@@ -4,13 +4,12 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('auth_app', '0010_role_permissions'),
+        ("auth_app", "0010_role_permissions"),
     ]
 
     operations = [
         migrations.DeleteModel(
-            name='UserProfile',
+            name="UserProfile",
         ),
     ]

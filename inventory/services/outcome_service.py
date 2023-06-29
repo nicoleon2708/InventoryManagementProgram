@@ -1,8 +1,10 @@
-from inventory.models.outcome_detail import OutcomeDetail
-from inventory.models.location import Location
-from inventory.models.rule import Rule
-from rest_framework.validators import ValidationError
 from copy import deepcopy
+
+from rest_framework.validators import ValidationError
+
+from inventory.models.location import Location
+from inventory.models.outcome_detail import OutcomeDetail
+from inventory.models.rule import Rule
 
 
 class OutcomeService:
@@ -18,7 +20,7 @@ class OutcomeService:
     def calculate_add_more_quantity(outcome, outcome_detail, quantity):
         total_price = outcome.total_price
         price = outcome_detail.price
-        total_price += price*quantity
+        total_price += price * quantity
         return total_price
 
     @staticmethod
@@ -29,18 +31,18 @@ class OutcomeService:
             for outcome_detail in list_outcome_detail:
                 quantity = outcome_detail.quantity
                 price = outcome_detail.price
-                total_price += quantity*price
+                total_price += quantity * price
         else:
             total_price = 0
         return total_price
-    
+
     @staticmethod
     def calculate_remove_product_quantity(outcome, outcome_detail, quantity):
         total_price = outcome.total_price
         price = outcome_detail.price
-        total_price -= price*quantity
+        total_price -= price * quantity
         return total_price
-    
+
     @staticmethod
     def get_partner_location(outcome):
         partner = outcome.partner
@@ -58,7 +60,7 @@ class OutcomeService:
         except Location.DoesNotExist:
             list_location = None
         return list_location
-    
+
     @staticmethod
     def get_external_location_of_partner(outcome):
         list_location = OutcomeService.get_all_location_of_warehouse(outcome)

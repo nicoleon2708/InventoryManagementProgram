@@ -4,14 +4,13 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('inventory', '0023_locationstock_rule_alter_rule_group'),
+        ("inventory", "0023_locationstock_rule_alter_rule_group"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='locationstock',
-            name='rule',
+            model_name="locationstock",
+            name="rule",
         ),
     ]

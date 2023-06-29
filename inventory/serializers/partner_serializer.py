@@ -1,8 +1,9 @@
 from rest_framework import serializers
+
 from inventory.models.partner import Partner
 
-class PartnerSerializer(serializers.ModelSerializer):
 
+class PartnerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Partner
-        fields = '__all__'
+        fields = "__all__"

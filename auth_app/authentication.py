@@ -1,9 +1,10 @@
-from rest_framework.exceptions import AuthenticationFailed
-from rest_framework import authentication
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from auth_app.models.user import User
 import jwt
 from django.conf import settings
+from rest_framework import authentication
+from rest_framework.exceptions import AuthenticationFailed
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
+from auth_app.models.user import User
 
 # class JWTAuthentication(authentication.BaseAuthentication):
 #     def authenticate(self, request):
@@ -11,7 +12,7 @@ from django.conf import settings
 
 #         if not auth_data:
 #             return None
-        
+
 #         prefix, token = auth_data.decode('utf-8').split('')
 #         try:
 #             payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])

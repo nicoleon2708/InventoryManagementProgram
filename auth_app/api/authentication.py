@@ -1,8 +1,10 @@
-from rest_framework.authentication import TokenAuthentication, get_authorization_header
-from rest_framework.exceptions import AuthenticationFailed
-from rest_framework.authtoken.models import Token
 import datetime
+
 import pytz
+from rest_framework.authentication import (TokenAuthentication,
+                                           get_authorization_header)
+from rest_framework.authtoken.models import Token
+from rest_framework.exceptions import AuthenticationFailed
 
 
 class ExpiringTokenAuthentication(TokenAuthentication):
@@ -19,9 +21,6 @@ class ExpiringTokenAuthentication(TokenAuthentication):
         utc_now = utc_now.replace(tzinfo=pytz.utc)
 
         if token.created < utc_now - datetime.timedelta(days=1):
-            raise AuthenticationFailed(
-                "Token has been expired, please log in again!")
+            raise AuthenticationFailed("Token has been expired, please log in again!")
 
         return token.user, token
-
-

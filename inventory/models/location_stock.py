@@ -1,22 +1,24 @@
 from django.db import models
-from inventory.models.product import Product
+
 from inventory.models.location import Location
+from inventory.models.product import Product
 from inventory.models.rule import Rule
+
 
 class LocationStock(models.Model):
     location = models.ForeignKey(
-        Location, 
+        Location,
         on_delete=models.CASCADE,
         related_name="location_stocks",
         blank=True,
-        null=True
+        null=True,
     )
     product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
-        related_name='location_stocks',
+        related_name="location_stocks",
         blank=True,
-        null=True
+        null=True,
     )
     quantity = models.IntegerField(default=0)
     description = models.TextField(max_length=255, blank=True)

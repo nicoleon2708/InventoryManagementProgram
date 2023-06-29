@@ -1,10 +1,12 @@
-from rest_framework import status
-from auth_app.serializers.recovery_password_serializer import RecoveryPasswordSerializer
-from rest_framework import generics
-from django.http import JsonResponse
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from django.utils.encoding import smart_str, force_str, force_bytes, DjangoUnicodeDecodeError
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.http import JsonResponse
+from django.utils.encoding import (DjangoUnicodeDecodeError, force_bytes,
+                                   force_str, smart_str)
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from rest_framework import generics, status
+
+from auth_app.serializers.recovery_password_serializer import \
+    RecoveryPasswordSerializer
 
 
 class RecoveryPasswordView(generics.GenericAPIView):
@@ -16,5 +18,5 @@ class RecoveryPasswordView(generics.GenericAPIView):
         serializer.send_recovery_token(request)
         return JsonResponse(
             {"message": "An mail to recover your account has been sent to your email!"},
-            status=status.HTTP_200_OK
+            status=status.HTTP_200_OK,
         )

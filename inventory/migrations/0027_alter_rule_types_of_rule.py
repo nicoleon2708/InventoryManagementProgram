@@ -4,15 +4,21 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('inventory', '0026_rule_destination_location_rule_source_location'),
+        ("inventory", "0026_rule_destination_location_rule_source_location"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='rule',
-            name='types_of_rule',
-            field=models.CharField(choices=[('STRAIGHT', 'Take From Stock'), ('ANT_LC', 'Take From Stock, If Unavailable, Trigger Another Rule')], default='STRAIGHT', max_length=255),
+            model_name="rule",
+            name="types_of_rule",
+            field=models.CharField(
+                choices=[
+                    ("STRAIGHT", "Take From Stock"),
+                    ("ANT_LC", "Take From Stock, If Unavailable, Trigger Another Rule"),
+                ],
+                default="STRAIGHT",
+                max_length=255,
+            ),
         ),
     ]

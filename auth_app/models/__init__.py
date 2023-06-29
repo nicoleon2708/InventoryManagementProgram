@@ -1,5 +1,1 @@
-from auth_app.models import (
-    user,
-    user_role,
-    role
-)
+from auth_app.models import role, user, user_role

@@ -1,10 +1,9 @@
 from rest_framework import serializers
+
 from inventory.models.warehouse import Warehouse
 
-class ListWarehouseSerialzier(serializers.ModelSerializer):
 
+class ListWarehouseSerialzier(serializers.ModelSerializer):
     class Meta:
         model = Warehouse
-        fields = '__all__'
-    
-    
+        fields = "__all__"

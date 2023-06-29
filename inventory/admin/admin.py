@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from inventory.admin.company import Company, CompanyAdmin
 from inventory.admin.group_rule import GroupRule, GroupRuleAdmin
 from inventory.admin.location import Location, LocationAdmin
@@ -11,7 +12,6 @@ from inventory.admin.rule import Rule, RuleAdmin
 from inventory.admin.transfer import Transfer, TransferAdmin
 from inventory.admin.transfer_detail import TransferDetail, TransferDetailAdmin
 from inventory.admin.warehouse import Warehouse, WarehouseAdmin
-
 
 # Register your model
 admin.site.register(Company, CompanyAdmin)
