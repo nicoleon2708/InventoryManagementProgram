@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os
 from pathlib import Path
 from datetime import timedelta
+from django.utils.translation import gettext_lazy as _
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -33,6 +34,8 @@ if not DEBUG:
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -51,7 +54,7 @@ INSTALLED_APPS = [
     # internal apps
     'inventory.apps.InventoryConfig',
     'auth_app.apps.AuthAppConfig',
-
+    'notifications.apps.NotificationsConfig'
 ]
 
 # White listing the localhost:3000 port for React
@@ -69,8 +72,8 @@ CORS_ORIGIN_WHITELIST = (
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10,
+    'DEFAULT_PAGINATION_CLASS': 'inventory.pagination.CustomPagination',
+    'PAGE_SIZE': 100,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.BasicAuthentication',
@@ -139,10 +142,36 @@ TEMPLATES = [
     },
 ]
 
+# Custom Admin Dashboard UI
+JAZZMIN_SETTINGS = {
+    "site_title": "FastTransfer Admin",
+    "site_header": "FastTransfer",
+    "site_brand": "FastTransfer Admin",
+    "order_with_respect_to": [
+        "auth", "main.banners", "main.service", "main.enquiry", 
+        "main.gallery", "main.GalleryImage", "main.Page"
+    ],
+    "topmenu_links": [
+        {"name": "Home",  "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"name": "Support", "url": "https://github.com/farridav/django-jazzmin/issues", "new_window": True},
+        {"model": "auth_app.User"},
+        {"app": "inventory"},
+    ],
+}
 
 WSGI_APPLICATION = 'inventorymanagement.wsgi.application'
 
+ASGI_APPLICATION = "inventorymanagement.asgi.application"
 
+# Configure the Channels layer
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 

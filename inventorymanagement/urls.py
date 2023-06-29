@@ -7,6 +7,8 @@ from drf_yasg import openapi
 from rest_framework import permissions
 from django.conf.urls.static import static
 from django.conf import settings
+from notifications.routing import websocket_urlpatterns
+
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -24,6 +26,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('inventory/', include('inventory.urls'), name="inventory_app"),
+    path('push_notification/', include('notifications.urls'), name='notification_app'),
     path('api-swagger/', include('rest_framework.urls')),
     path('auth/', include('auth_app.urls'), name="auth_app"),
     path('admin/', admin.site.urls),
@@ -32,3 +35,5 @@ urlpatterns = [
     path('redoc/', schema_view.with_ui('redoc',
          cache_timeout=0), name='schema-redoc'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += websocket_urlpatterns
