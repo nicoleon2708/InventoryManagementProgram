@@ -10,6 +10,7 @@ from inventory.serializers.location_stock_serializer import \
 class ProductSerializer(serializers.ModelSerializer):
     company = CompanySerializer()
     group_rule = GroupRuleSerializer()
+    group_rule = GroupRuleSerializer()
     location_stocks = LocationStockSerializer(many=True, read_only=True)
 
     class Meta:

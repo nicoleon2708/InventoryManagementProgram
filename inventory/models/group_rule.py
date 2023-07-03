@@ -13,10 +13,11 @@ class GroupRule(models.Model):
         blank=True,
     )
 
+
     class Meta:
         db_table = "group_rule"
         verbose_name = "group of rules"
         verbose_name_plural = "groups of rules"
 
     def __str__(self):
-        return f"GroupRule({self.name})"
+        return f"{self.name}"

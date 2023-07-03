@@ -1,10 +1,10 @@
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
+
 from notifications.models import Notification
 
 
 class NotificationSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Notification
-        fields = '__all__'
+        fields = "__all__"
