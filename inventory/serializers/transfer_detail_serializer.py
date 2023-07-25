@@ -7,7 +7,11 @@ from inventory.serializers.product_serializer import ProductSerializer
 
 class TransferDetailSerializer(serializers.ModelSerializer):
     product = ProductSerializer()
+    status = serializers.SerializerMethodField()
 
     class Meta:
         model = TransferDetail
-        fields = ["id", "product", "transfer", "quantity", "status"]
+        fields = '__all__'
+
+    def get_status(self, obj):
+        return obj.get_status_display()

@@ -66,7 +66,6 @@ class TransferService:
             transfer = Transfer.objects.get(
                 source_location=rule.source_location,
                 destination_location=rule.destination_location,
-                # transfer_detail__product=product
             )
         except Transfer.DoesNotExist:
             transfer = None
@@ -91,6 +90,7 @@ class TransferService:
             outcome=outcome,
             source_location=source_location,
             destination_location=destination_location,
+            total_price=outcome.total_price,
             *args,
             **kwargs
         )
@@ -152,6 +152,38 @@ class TransferService:
                 note=note,
             )
         transfer_list.append(transfer)
+
+    @staticmethod
+    def import_product(product, quantity, destination_location):
+        stock_destination_location = (
+            TransferService.get_location_stock_of_product_at_location(
+                destination_location, product
+            )
+        )
+        if stock_destination_location:
+            stock_destination_location.quantity += quantity
+        if not stock_destination_location:
+            stock_destination_location = LocationStock.objects.create(
+                location=destination_location, product=product, quantity=quantity
+            )
+        product.quantity += quantity
+        product.save()
+        stock_destination_location.save()
+
+    @staticmethod
+    def calculate_total_price(transfer):
+        list_transfer_detail = TransferService.get_list_transfer_detail_of_transfer(
+            transfer
+        )
+        total_price = transfer.total_price
+        if list_transfer_detail:
+            for detail in list_transfer_detail:
+                quantity = detail.quantity
+                price = detail.price
+                total_price += quantity * price
+        else:
+            total_price = 0
+        return total_price
 
     @staticmethod
     def logistic(destination, product, quantity, outcome, transfer_list):

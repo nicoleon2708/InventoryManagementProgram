@@ -1,5 +1,6 @@
 from django.db import models
 
+from inventory.models.outcome import Outcome
 from inventory.models.product import Product
 from inventory.models.transfer import Transfer
 
@@ -20,12 +21,13 @@ class TransferDetail(models.Model):
         null=True,
     )
     quantity = models.IntegerField(default=0, blank=True, null=True)
+    price = models.IntegerField(default=0, null=True, blank=True)
 
     class StatusChoice(models.TextChoices):
-        on_pending = (("PENDING", "On Pending"),)
-        received = (("RECEIVED", "Received"),)
-        on_transfer = (("TRANSFER", "On Transfer"),)
-        completed = (("COMPLETED", "Completed"),)
+        on_pending = ("PENDING", "On Pending")
+        received = ("RECEIVED", "Received")
+        on_transfer = ("TRANSFER", "On Transfer")
+        completed = ("COMPLETED", "Completed")
         failed = ("FAILED", "Failed")
 
     status = models.CharField(
