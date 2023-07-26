@@ -1,24 +1,33 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom'
+import authService from '../../services/auth.service';
 
 function EmailVerification() {
-    const [isVerified, setIsVerified] = useState(null);
 
-    useEffect(() => {
-        const token = new URLSearchParams(window.location.search).get('token')
-        if (token) {
-            fetch(`http://127.0.0.1:8000/auth/user/email-verification/?token=${token}`)
-                .then(response => response.json())
-                .then(data => {
-                    setIsVerified(data.is_verified)
-                })
-                .catch(error => console.error(error))
-        }
-    }, []);
+    const {token} = useParams()
+    const navigate = useNavigate()
+
+    useEffect(()=>{
+
+
+
+        authService.emailVerification(token)
+        .then(res=>{
+            setTimeout(() => {
+                navigate('/login')
+            }, 4000);
+        })
+        .catch(err=>console.log(err))
+    }, [])
 
     return (
-        <div>
-            {isVerified === true && <p>Email is verified.</p>}
-            {isVerified === false && <p>Email is not verified.</p>}
+        <div className='bg-zinc-200'>
+        <div className=' w-[50%]  flex items-center justify-center mx-auto min-h-screen rounded-lg'>
+            <div className='shadow-md bg-white flex items-center flex-col gap-2 justify-center p-10'>
+                <h1 className='text-2xl font-bold'>EMAIL VERIFICATION</h1>
+                <p>Your account has been verified and we will transfer you to login page</p>
+            </div>
+        </div>
         </div>
     );
 }

@@ -1,18 +1,22 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-import AuthService from '../../services/apis/auth/AuthService'
+import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import authService from '../../services/auth.service'
 const PasswordRecovery = () => {
 
     const [email, setEmail] = useState('')
+    const navigate = useNavigate()
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        AuthService.RecoveryPassword({ email })
-            .then(res => console.log(res),
-                toast.success("An mail to recover your account has been sent to your email!")
-            )
-            .catch(error => console.log(error))
+        let data = {
+            email: email
+        }
+        authService.recoveryPassword(data)
+        .then(res=>{
+            navigate('/sending-confirm')
+        })
+        .catch(err=>console.log(err))
     }
 
     return (
@@ -20,8 +24,8 @@ const PasswordRecovery = () => {
             <div className='bg-[#f2f2f2] h-screen flex justify-center items-center	'>
                 <div className=' bg-white h-fit min-h-0 min-w-fit rounded-lg p-8'>
                     <form action=''>
-                        <h1 className=' text-center text-2xl font-bold text-[#66425c] border-b-slate-200'>
-                            odoo
+                        <h1 className=' text-center text-2xl font-bold  border-b-slate-200'>
+                            Recovery your password
                         </h1>
 
                         <div className='mt-10'>
@@ -31,13 +35,13 @@ const PasswordRecovery = () => {
                             />
                         </div>
 
-                        <button onClick={(e) => handleSubmit(e)} className='mt-7 bg-[#66425c] text-white w-full p-2 rounded-md font-bold hover:opacity-80'>
+                        <button onClick={(e) => handleSubmit(e)} className='mt-7 bg-[#ff792e] text-white w-full p-2 rounded-md font-bold hover:opacity-80'>
                             Update your password
                         </button>
 
                         <div className='mt-5 '>
-                            <p className='text-[#66425c] font-bold cursor-pointer mr-5'>
-                                <Link to='/login'>Return to login page</Link></p>
+                            <p className=' font-bold cursor-pointer mr-5'>
+                                <Link className='no-underline text-[#ff792e]' to='/login'>Return to login page</Link></p>
                         </div>
 
 

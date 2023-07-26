@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Image from '../../assets/images/RegisterBackground.jpg'
+import Image from '../../assets/images/login.jpg'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify';
 import authService from '../../services/auth.service';
@@ -8,6 +8,9 @@ const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    const [usernameError, setUsernameError] = useState('')
+    const [passwordError, setPasswordError] = useState('')
+    const [error, setError] = useState('')
     const navigate = useNavigate()
 
     const togglePassword = (e) => {
@@ -18,22 +21,46 @@ const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        setUsernameError('');
+        setPasswordError('');
+        setError('');
+        if(!username){
+            setUsernameError('You must enter username to login!')
+        }
+        if(!password){
+            setPasswordError("Please enter your password!")
+        }
         authService.login(username, password)
-        .then(res=>console.log(res),
-        navigate('/home'))
-        .catch(err=>console.log(err))
-
+        .then(res=>{
+            navigate('/home')
+            window.location.reload()
+        })
+        .catch(error=>{
+            if (error.response) {
+                // The error is a response error from the API
+                const { data } = error.response;
+                if(username && data.username){
+                    setUsernameError(data.username)
+                }
+                if(password && data.password){
+                    setPasswordError(data.username)
+                }
+                else{
+                    setPasswordError(data.non_field_errors)
+                }
+            }         
+        })
     }
 
 
     return (
         <div>
-            <section className=' p-10 min-h-screen flex items-center justify-center'>
+            <section className='pt-24 md:pt-16 min-h-screen flex items-center justify-center'>
                 {/* Login container */}
-                <div className='bg-white flex max-3-xl pt-20 px-5'>
+                <div className='bg-white flex max-3-xl '>
                     {/* form */}
 
-                    <div className='md:w-1/2 px-16'>
+                    <div className='md:w-1/3 px-[20px] m-auto'>
                         <h2 className='font-bold text-2xl'>
                             Sign in
                         </h2>
@@ -41,16 +68,18 @@ const Login = () => {
                             If your already have an FastTransfer account, please login.
                         </p>
 
+                        {error && <p className='text-red-600 font-bold'>{error}</p>}
 
 
                         <form onSubmit={handleSubmit} className='flex flex-col gap-4' action=''>
                             <input
-                                className='p-2 mt-8 rounded-xl border'
+                                className='p-2 rounded-xl border'
                                 type='text'
                                 name="username"
                                 placeholder='Username'
                                 value={username} onChange={e => setUsername(e.target.value)}
                             />
+                            {usernameError && <p className='text-red-600 font-bold'>{usernameError}</p>}
 
                             <div className='relative'>
                                 <input
@@ -103,15 +132,17 @@ const Login = () => {
                                         </svg>
                                     )}
                                 </button>
+
                             </div>
+                            {passwordError && <p className='text-red-600 font-bold'>{passwordError}</p>}
 
                             <div class="flex items-center mb-4">
                                 <input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                 <label for="default-checkbox" class="ml-2 text-sm font-medium text-black">Remember me?</label>
                             </div>
 
-                            <button onClick={handleSubmit} type='button' className='bg-[#002d74] text-white rounded-xl py-2 hover:opacity-80'>
-                                Login
+                            <button onClick={handleSubmit} type='button' className='bg-[#ff792e] border-solid border-[1px] border-[#ff792e] rounded-xl py-3 hover:bg-white  '>
+                                <span className='text-white hover:text-[#ff792e]'>Login</span>
                             </button>
                         </form>
 
@@ -131,8 +162,8 @@ const Login = () => {
                         </button>
 
                         <p className='mt-5 font-bold text-xs border-b border-gray-400 py-4'>
-                            <Link
-                                to='/forget-password'
+                            <Link className='no-underline text-[#ff792e]'
+                                to='/recovery-password'
                             >
                                 Forgot your password?
                             </Link>
@@ -141,7 +172,7 @@ const Login = () => {
                         <div className='mt-3 text-xs flex justify-between items-center'>
                             <p>If your don't have an account...</p>
                             <span className='font-bold'>
-                                <Link to='/register'>
+                                <Link className='no-underline text-[#ff792e]' to='/register'>
                                     Sign Up
                                 </Link>
                             </span>
@@ -149,8 +180,8 @@ const Login = () => {
                     </div>
 
                     {/* image */}
-                    <div className='sm:block hidden w-1/2 p-5'>
-                        <img className=' rounded-2xl' src={Image} alt='login-img' />
+                    <div className='sm:block hidden w-2/3'>
+                        <img src={Image} alt='login-img' />
                     </div>
                 </div>
             </section >

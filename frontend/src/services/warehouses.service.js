@@ -12,7 +12,7 @@ const deleteWarehouse = (id) =>{
 }
 
 const updateWarehouse = (id, data) =>{
-    return axios.put(API_URL, `warehouse/${id}/update/`, data, authHeader());
+    return axios.put(API_URL + `warehouse/${id}/update/`, data, authHeader());
 }
 
 const getAllWarehouses = () =>{

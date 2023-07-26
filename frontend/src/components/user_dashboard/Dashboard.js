@@ -1,8 +1,83 @@
-import React from 'react'
+import { faUser, faWarehouse, faFileInvoiceDollar, faTruckArrowRight } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import React, { useEffect, useState } from 'react'
+import partnerService from '../../services/partner.service'
+import warehouseService from '../../services/warehouses.service'
+import outcomeService from '../../services/outcome.service'
+import transferService from '../../services/transfer.service'
+import ChartComponent from './ChartComponent'
 
 const Dashboard = () => {
+  const [partners, setPartners] = useState([])
+  const [warehouses, setWarehouses] = useState([])
+  const [outcomes, setOutcomes] = useState([])
+  const [transfers, setTransfers] = useState([])
+
+  useEffect(()=>{
+    partnerService.getAllPartner()
+    .then(res=>setPartners(res.data.results))
+    .catch(err=>console.log(err))
+
+    warehouseService.getAllWarehouses()
+    .then(res=>setWarehouses(res.data.results))
+    .catch(err=>console.log(err))
+
+    outcomeService.getAllOutcomes()
+    .then(res=>setOutcomes(res.data.results))
+    .catch(err=>console.log(err))
+
+    transferService.getAllTransfer()
+    .then(res=>setTransfers(res.data.results))
+    .catch(err=>console.log(err))
+  }, [])
   return (
-    <div>Dashboard</div>
+    <div>
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className='bg-white flex items-center justify-between p-[10px]'>
+          <div>
+              <p>{partners && partners.length}</p>
+              <p>Partners</p>
+          </div>
+
+          <div>
+              <FontAwesomeIcon className='w-[50px]' icon={faUser} />
+          </div>
+        </div>
+        <div className='bg-white flex items-center justify-between p-[10px]'>
+          <div>
+              <p>{warehouses && warehouses.length}</p>
+              <p>Warehouses</p>
+          </div>
+
+          <div>
+              <FontAwesomeIcon className='w-[50px]' icon={faWarehouse} />                            
+          </div>
+        </div>
+        <div className='bg-white flex items-center justify-between p-[10px]'>
+          <div>
+              <p>{outcomes && outcomes.length}</p>
+              <p>Sale invoices</p>
+          </div>
+
+          <div>
+              <FontAwesomeIcon className='w-[50px]' icon={faFileInvoiceDollar} />        
+          </div>
+        </div>
+        <div className='bg-white flex items-center justify-between p-[10px]'>
+          <div>
+              <p>{transfers && transfers.length}</p>
+              <p>Transfer Invoices</p>
+          </div>
+
+          <div>
+            <FontAwesomeIcon className='w-[50px]' icon={faTruckArrowRight} />        
+          </div>
+        </div>
+      </div>
+      <ChartComponent/>
+
+
+    </div>
   )
 }
 

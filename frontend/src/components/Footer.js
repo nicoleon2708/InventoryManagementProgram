@@ -8,7 +8,7 @@ import {
 } from '@fortawesome/free-brands-svg-icons'
 const Footer = () => {
     return (
-        <div className='w-full mt-24 bg-slate-900 text-gray-300 py-y px-2'>
+        <div className='w-full bg-slate-900 text-gray-300 py-y px-2'>
             <div className='max-w-[1240px] mx-auto grid grid-cols-2 md:grid-cols-4 border-b2 border-gray-600 py-8'>
                 <div>
                     <h6 ckassName='font-bold uppercase pt-2'>Solutions</h6>
@@ -53,6 +53,16 @@ const Footer = () => {
                         <li className='py-1'>Marketing</li>
 
                     </ul>
+                </div>
+            </div>
+
+            <div className='flex justify-between items-center'>
+                <h4>Our sites:</h4>
+                <div>
+                    <FontAwesomeIcon className='mr-2' icon={faFacebook}/>
+                    <FontAwesomeIcon className='mr-2' icon={faTwitter}/>
+                    <FontAwesomeIcon className='mr-2' icon={faGithub}/>
+                    <FontAwesomeIcon className='mr-2' icon={faInstagram}/>
                 </div>
             </div>
         </div>

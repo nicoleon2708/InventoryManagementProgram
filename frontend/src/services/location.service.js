@@ -11,7 +11,7 @@ const deleteLocation = (id) => {
     return axios.delete(API_URL + `location/${id}/delete/`, authHeader());
 }
 const updateLocation = (id, data) => {
-    return axios.put(API_URL + `location/${id}/update/`, authHeader())
+    return axios.put(API_URL + `location/${id}/update/`, data, authHeader())
 }
 
 const getAllLocations = () =>{

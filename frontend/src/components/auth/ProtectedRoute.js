@@ -18,11 +18,11 @@ const ProtectedRoute = ()=> {
       const logout = () => {
         localStorage.removeItem('token');
         navigate('/login');
+        window.location.reload()
       };
 
       useEffect(() => {
         const token = JSON.parse(localStorage.getItem('token')); 
-        console.log(token)
         if (isTokenExpired(token)) {
           logout();
         }
