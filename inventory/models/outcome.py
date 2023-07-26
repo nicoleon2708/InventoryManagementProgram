@@ -1,3 +1,5 @@
+from typing import Iterable, Optional
+
 from django.conf import settings
 from django.db import models
 
@@ -25,9 +27,9 @@ class Outcome(models.Model):
     created_date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
     class StatusChoice(models.TextChoices):
-        on_pending = (("PENDING", "On Pending"),)
-        received = (("RECEIVED", "Received"),)
-        on_shipping = (("SHIPPING", "On Shipping"),)
+        on_pending = ("PENDING", "On Pending")
+        received = ("RECEIVED", "Received")
+        on_shipping = ("SHIPPING", "On Shipping")
         completed = ("COMPLETED", "Completed")
 
     status = models.CharField(
@@ -48,7 +50,15 @@ class Outcome(models.Model):
         db_table = "outcome"
         verbose_name = "Outcome"
         verbose_name_plural = "Outcomes"
-        ordering = ["created_date"]
+        ordering = ["-created_date"]
 
     def __str__(self):
         return f"Order({self.user} - {self.partner} - {self.total_price})"
+
+    @classmethod
+    def create(cls, values, user=None):
+        return cls.objects.create(
+            user=(user and user or None),
+            partner=values["partner"],
+            warehouse=values["warehouse"],
+        )

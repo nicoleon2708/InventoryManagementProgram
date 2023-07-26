@@ -28,3 +28,17 @@ class Company(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
+    @classmethod
+    def create(cls, values, user=None):
+        return cls.objects.create(
+            name=values["name"],
+            first_name=values["first_name"],
+            last_name=values["last_name"],
+            phone=values["phone"],
+            address=values["address"],
+            postal_code=values["postal_code"],
+            city=values["city"],
+            district=values["district"],
+            user=(user and user or None),
+        )

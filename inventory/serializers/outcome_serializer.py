@@ -11,6 +11,7 @@ class OutcomeSerializer(serializers.ModelSerializer):
     partner = PartnerSerializer()
     user = UserSerializer()
     order_detail = OutcomeDetailSerializer(many=True, read_only=True)
+    status = serializers.SerializerMethodField()
 
     class Meta:
         model = Outcome
@@ -22,4 +23,8 @@ class OutcomeSerializer(serializers.ModelSerializer):
             "created_date",
             "order_detail",
             "status",
+            "warehouse",
         ]
+
+    def get_status(self, obj):
+        return obj.get_status_display()

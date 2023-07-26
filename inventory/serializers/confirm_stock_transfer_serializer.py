@@ -43,7 +43,7 @@ class ConfirmStockTransferSerializer(serializers.ModelSerializer):
                     or stock_transfer.quantity == 0
                     or stock_transfer.quantity < transfer_detail.quantity
                 ):
-                    continue
+                    raise ValidationError("Do not enough stock to confirm transfer!")
 
                 transfer_detail.status = TransferDetail.StatusChoice.completed
                 transfer_detail.save()

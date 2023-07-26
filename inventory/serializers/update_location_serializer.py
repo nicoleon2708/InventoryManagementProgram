@@ -43,6 +43,21 @@ class UpdateLocationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return Location.objects.create(**validated_data)
 
+    def validate_name(self, value):
+        pk = self.context["pk"]
+        user = self.context["request"].user
+        company = user.company
+        list_warehouse = Warehouse.objects.filter(company=company)
+        try:
+            location = Location.objects.exclude(id=pk).get(
+                name=value, warehouse__in=list_warehouse
+            )
+        except Location.DoesNotExist:
+            location = None
+        if location:
+            raise ValidationError("This name of location is already taken!")
+        return value
+
     def validate(self, data):
         pk = self.context["pk"]
         try:
@@ -56,8 +71,11 @@ class UpdateLocationSerializer(serializers.ModelSerializer):
         instance = self.validated_data["location"]
         instance.name = self.validated_data.get("name", instance.name)
         instance.address = self.validated_data.get("address", instance.address)
-        instance.postal_code = self.validated_data.get("address", instance.postal_code)
-        instance.city = self.validated_data.get("address", instance.city)
-        instance.district = self.validated_data.get("address", instance.district)
+        instance.postal_code = self.validated_data.get(
+            "postal_code", instance.postal_code
+        )
+        instance.city = self.validated_data.get("city", instance.city)
+        instance.district = self.validated_data.get("district", instance.district)
+        instance.warehouse = self.validated_data.get("warehouse", instance.warehouse)
         instance.save()
         return instance

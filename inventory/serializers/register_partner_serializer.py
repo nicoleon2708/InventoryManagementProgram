@@ -26,6 +26,16 @@ class RegisterPartnerSerializer(serializers.ModelSerializer):
             "district",
         ]
 
+    def validate_company_name(self, value):
+        user = self.context["request"].user
+        try:
+            partner = Partner.objects.get(company_name=value, user=user)
+        except Partner.DoesNotExist:
+            partner = None
+        if partner:
+            raise ValidationError("This name of partner is already taken!")
+        return value
+
     def validate_contact_phone(self, value):
         if len(value) != 10:
             raise ValidationError("Phone digits is not valid!")
@@ -33,15 +43,6 @@ class RegisterPartnerSerializer(serializers.ModelSerializer):
 
     def register_partner(self):
         user = self.context["request"].user
-        partner = Partner.objects.create(
-            company_name=self.validated_data["company_name"],
-            contact_name=self.validated_data["contact_name"],
-            contact_phone=self.validated_data["contact_phone"],
-            address=self.validated_data["address"],
-            postal_code=self.validated_data["postal_code"],
-            city=self.validated_data["city"],
-            district=self.validated_data["district"],
-            user=user,
-        )
+        partner = Partner.create(values=self.validated_data, user=user)
         partner.save()
         return partner

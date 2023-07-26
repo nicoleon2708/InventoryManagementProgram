@@ -62,3 +62,15 @@ class Rule(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
+    @classmethod
+    def create(cls, values, user=None):
+        return cls.objects.create(
+            user=(user and user or None),
+            name=values["name"],
+            description=values["description"],
+            types_of_rule=values["types_of_rule"],
+            source_location=values["source_location"],
+            destination_location=values["destination_location"],
+            group=values["group"],
+        )

@@ -98,11 +98,14 @@ class TransferService:
         return transfer
 
     @staticmethod
-    def create_transfer_detail(transfer, product, quantity, status, *args, **kwargs):
+    def create_transfer_detail(
+        transfer, product, quantity, price, status, *args, **kwargs
+    ):
         transfer_detail = TransferDetail(
             transfer=transfer,
             product=product,
             quantity=quantity,
+            price=price,
             status=status,
             *args,
             **kwargs
@@ -132,7 +135,7 @@ class TransferService:
 
     @staticmethod
     def create_transfer_and_transfer_detail_while_valid(
-        match_rule, product, quantity, transfer_list, outcome, status, note=""
+        match_rule, product, quantity, price, transfer_list, outcome, status, note=""
     ):
         transfer = TransferService.check_match_transfer(transfer_list, match_rule)
         transfer_detail = TransferService.check_match_transfer_detail(transfer, product)
@@ -148,6 +151,7 @@ class TransferService:
                 transfer=transfer,
                 product=product,
                 quantity=quantity,
+                price=price,
                 status=status,
                 note=note,
             )
@@ -210,6 +214,7 @@ class TransferService:
                         match_rule=match_rule,
                         product=product,
                         quantity=quantity,
+                        price=product.price,
                         transfer_list=transfer_list,
                         outcome=outcome,
                         status=TransferDetail.StatusChoice.failed,
@@ -228,6 +233,7 @@ class TransferService:
                         match_rule=match_rule,
                         product=product,
                         quantity=quantity,
+                        price=product.price,
                         transfer_list=transfer_list,
                         outcome=outcome,
                         status=TransferDetail.StatusChoice.completed,
@@ -244,6 +250,7 @@ class TransferService:
                         match_rule=match_rule,
                         product=product,
                         quantity=quantity,
+                        price=product.price,
                         transfer_list=transfer_list,
                         outcome=outcome,
                         status=TransferDetail.StatusChoice.on_transfer,
@@ -268,6 +275,7 @@ class TransferService:
                         match_rule=match_rule,
                         product=product,
                         quantity=quantity,
+                        price=product.price,
                         transfer_list=transfer_list,
                         outcome=outcome,
                         status=TransferDetail.StatusChoice.completed,

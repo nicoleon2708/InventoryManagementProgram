@@ -30,3 +30,11 @@ class LocationStock(models.Model):
 
     def __str__(self):
         return f"{self.product} - {self.location} - {self.quantity}"
+
+    def create(cls, values):
+        return cls.objects.create(
+            location=values["location"],
+            product=values["product"],
+            quantity=values["quantity"],
+            description=values["description"],
+        )

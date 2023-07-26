@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from inventory.admin.tabinlines.stock_at_location import StockAtLocationInLine
 from inventory.models.location import Location
 
 
@@ -14,3 +15,4 @@ class LocationAdmin(admin.ModelAdmin):
         "partner",
     ]
     list_display = ["name", "warehouse", "partner", "address", "city"]
+    inlines = [StockAtLocationInLine]

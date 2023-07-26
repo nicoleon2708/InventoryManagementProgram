@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.validators import ValidationError
 
 from inventory.models.location import Location
 from inventory.models.warehouse import Warehouse
@@ -43,14 +44,19 @@ class CreateLocationSerializer(serializers.ModelSerializer):
             "warehouse",
         ]
 
+    def validate_name(self, value):
+        user = self.context["request"].user
+        company = user.company
+        list_warehouse = Warehouse.objects.filter(company=company)
+        try:
+            location = Location.objects.get(name=value, warehouse__in=list_warehouse)
+        except Location.DoesNotExist:
+            location = None
+        if location:
+            raise ValidationError("This name of location is already taken!")
+        return value
+
     def create(self, validated_data):
-        location = Location.objects.create(
-            name=validated_data["name"],
-            address=validated_data["address"],
-            postal_code=validated_data["postal_code"],
-            city=validated_data["city"],
-            district=validated_data["district"],
-            warehouse=validated_data["warehouse"],
-        )
+        location = Location.create(values=validated_data)
         location.save()
         return location

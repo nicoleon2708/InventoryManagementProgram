@@ -25,3 +25,16 @@ class Partner(models.Model):
 
     def __str__(self):
         return f"Partner({self.company_name} - {self.contact_name})"
+
+    @classmethod
+    def create(cls, values, user=None):
+        return cls.objects.create(
+            company_name=values["company_name"],
+            contact_name=values["contact_name"],
+            contact_phone=values["contact_phone"],
+            address=values["address"],
+            postal_code=values["postal_code"],
+            city=values["city"],
+            district=values["district"],
+            user=(user and user or None),
+        )

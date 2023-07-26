@@ -28,5 +28,6 @@ class ConfirmImportProductSerializer(serializers.ModelSerializer):
         for detail in transfer_detail_list:
             detail.status = TransferDetail.StatusChoice.received
             detail.save()
+        transfer.status = Transfer.StatusChoice.received
         transfer.save()
         return transfer

@@ -17,6 +17,17 @@ class UpdatePartnerSerializer(serializers.ModelSerializer):
         model = Partner
         fields = "__all__"
 
+    def validate_company_name(self, value):
+        user = self.context["request"].user
+        pk = self.context["pk"]
+        try:
+            partner = Partner.objects.exclude(id=pk).get(company_name=value, user=user)
+        except Partner.DoesNotExist:
+            partner = None
+        if partner:
+            raise ValidationError("This name of partner is already taken!")
+        return value
+
     def validate_contact_phone(self, value):
         if len(value) != 10:
             raise ValidationError("Phone digits is not valid!")

@@ -30,7 +30,9 @@ class LoginSerializer(serializers.Serializer):
         }
 
     def validate_username(self, value):
-        if not User.objects.get(username=value):
+        try:
+            User.objects.get(username=value)
+        except User.DoesNotExist:
             raise ValidationError("User with this username does not exist!")
         return value
 

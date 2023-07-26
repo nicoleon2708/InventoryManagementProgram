@@ -12,6 +12,17 @@ class UpdateGroupRuleSerializer(serializers.ModelSerializer):
         model = GroupRule
         fields = ["id", "name", "description"]
 
+    def validate_name(self, value):
+        pk = self.context["pk"]
+        user = self.context["request"].user
+        try:
+            group = GroupRule.objects.exclude(id=pk).get(name=value, user=user)
+        except GroupRule.DoesNotExist:
+            group = None
+        if group:
+            raise ValidationError("This name of group rule is already taken!")
+        return value
+
     def validate(self, data):
         pk = self.context["pk"]
         try:

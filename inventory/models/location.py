@@ -21,7 +21,7 @@ class Location(models.Model):
 
     partner = models.ForeignKey(
         Partner,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         related_name="locations",
         blank=True,
         null=True,
@@ -34,3 +34,14 @@ class Location(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
+    @classmethod
+    def create(cls, values, user=None):
+        return cls.objects.create(
+            name=values["name"],
+            warehouse=values["warehouse"],
+            address=values["address"],
+            postal_code=values["postal_code"],
+            city=values["city"],
+            district=values["district"],
+        )

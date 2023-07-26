@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.validators import ValidationError
 
 from inventory.models.group_rule import GroupRule
 from inventory.models.location import Location
@@ -41,15 +42,18 @@ class SetUpRuleSerializer(serializers.ModelSerializer):
             "user",
         ]
 
+    def validate_name(self, value):
+        user = self.context["request"].user
+        try:
+            rule = Rule.objects.get(name=value, user=user)
+        except Rule.DoesNotExist:
+            rule = None
+        if rule:
+            raise ValidationError("This name of rule is already taken!")
+        return value
+
     def set_up_rule(self):
-        rule = Rule.objects.create(
-            user=self.context["request"].user,
-            name=self.validated_data["name"],
-            description=self.validated_data["description"],
-            types_of_rule=self.validated_data["types_of_rule"],
-            destination_location=self.validated_data["destination_location"],
-            source_location=self.validated_data["source_location"],
-            group=self.validated_data["group"],
-        )
+        user = self.context["request"].user
+        rule = Rule.create(user=user, values=self.validated_data)
         rule.save()
         return rule

@@ -9,6 +9,8 @@ from inventory.serializers.delete_partner_serializer import \
 from inventory.serializers.partner_serializer import PartnerSerializer
 from inventory.serializers.register_partner_serializer import \
     RegisterPartnerSerializer
+from inventory.serializers.update_external_outcome_warehouse_serializer import \
+    UpdateExternalOutcomeSerializer
 from inventory.serializers.update_partner_serializer import \
     UpdatePartnerSerializer
 
@@ -16,8 +18,8 @@ from inventory.serializers.update_partner_serializer import \
 class PartnerViewSet(InventoryStandardViewSet):
     queryset = Partner.objects.all()
     serializer_class = PartnerSerializer
-    search_fields = ["name"]
-    ordering_fields = ["id", "name"]
+    search_fields = ["company_name", "contact_name", "contact_phone"]
+    ordering_fields = ["id", "company_name", "contact_name", "contact_phone"]
 
     def get_queryset(self):
         """
@@ -76,4 +78,20 @@ class PartnerViewSet(InventoryStandardViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.delete_partner()
         data["message"] = "Delete partner sucessful"
+        return JsonResponse(data=data, status=status.HTTP_200_OK)
+
+    @action(
+        methods=["PUT"],
+        url_path="update_external_location",
+        detail=True,
+        serializer_class=UpdateExternalOutcomeSerializer,
+    )
+    def update_external_location(self, request, pk=None, *args, **kwargs):
+        data = {}
+        serializer = self.get_serializer(
+            data=request.data, context={"pk": pk, "request": request}
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.update_external_location()
+        data["message"] = "Update external location successfully!"
         return JsonResponse(data=data, status=status.HTTP_200_OK)

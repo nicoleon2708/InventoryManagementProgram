@@ -11,7 +11,7 @@ class TransferDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TransferDetail
-        fields = '__all__'
+        fields = "__all__"
 
     def get_status(self, obj):
         return obj.get_status_display()

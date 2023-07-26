@@ -24,3 +24,14 @@ class Warehouse(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
+    @classmethod
+    def create(cls, values, user=None):
+        return cls.objects.create(
+            company=(user and user.company or None),
+            name=values["name"],
+            address=values["address"],
+            postal_code=values["postal_code"],
+            city=values["city"],
+            district=values["district"],
+        )

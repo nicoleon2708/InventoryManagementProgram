@@ -41,6 +41,17 @@ class UpdateRuleSerializer(serializers.ModelSerializer):
             "group",
         ]
 
+    def validate_name(self, value):
+        pk = self.context["pk"]
+        user = self.context["request"].user
+        try:
+            rule = Rule.objects.exclude(id=pk).get(name=value, user=user)
+        except Rule.DoesNotExist:
+            rule = None
+        if rule:
+            raise ValidationError("This name of rule is already taken!")
+        return value
+
     def validate(self, data):
         pk = self.context["pk"]
         try:

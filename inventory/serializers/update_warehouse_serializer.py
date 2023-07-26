@@ -15,6 +15,16 @@ class UpdateWarehouseSerializer(serializers.ModelSerializer):
         model = Warehouse
         fields = "__all__"
 
+    def validate_name(self, value):
+        pk = self.context["pk"]
+        try:
+            warehouse = Warehouse.objects.exclude(id=pk).get(name=value)
+        except Warehouse.DoesNotExist:
+            warehouse = None
+        if warehouse:
+            raise ValidationError("This name of warehouse is already taken!")
+        return value
+
     def validate(self, data):
         pk = self.context["pk"]
         try:

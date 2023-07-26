@@ -13,8 +13,6 @@ from inventory.serializers.create_location_serializer import \
 from inventory.serializers.delete_location_serializer import \
     DeleteLocationSerializer
 from inventory.serializers.location_serializer import LocationSerializer
-from inventory.serializers.update_external_outcome_warehouse_serializer import \
-    UpdateExternalOutcomeSerializer
 from inventory.serializers.update_location_serializer import \
     UpdateLocationSerializer
 
@@ -84,18 +82,18 @@ class LocationViewSet(InventoryStandardViewSet):
         data["messages"] = "Delete location successful"
         return JsonResponse(data=data, status=status.HTTP_200_OK)
 
-    @action(
-        methods=["PUT"],
-        detail=True,
-        url_path="update_external",
-        serializer_class=UpdateExternalOutcomeSerializer,
-    )
-    def update_external_outcome(self, request, pk=None, *args, **kwargs):
-        data = {}
-        serializer = self.get_serializer(
-            data=request.data, context={"pk": pk, "request": request}
-        )
-        serializer.is_valid(raise_exception=True)
-        serializer.update_external_outcome()
-        data["message"] = "Update successful"
-        return JsonResponse(data=data, status=status.HTTP_200_OK)
+    # @action(
+    #     methods=["PUT"],
+    #     detail=True,
+    #     url_path="update_external",
+    #     serializer_class=UpdateExternalOutcomeSerializer,
+    # )
+    # def update_external_outcome(self, request, pk=None, *args, **kwargs):
+    #     data = {}
+    #     serializer = self.get_serializer(
+    #         data=request.data, context={"pk": pk, "request": request}
+    #     )
+    #     serializer.is_valid(raise_exception=True)
+    #     serializer.update_external_outcome()
+    #     data["message"] = "Update successful"
+    #     return JsonResponse(data=data, status=status.HTTP_200_OK)

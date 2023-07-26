@@ -15,16 +15,21 @@ class CreateWarehouseSerializer(serializers.ModelSerializer):
         model = Warehouse
         fields = ["id", "name", "address", "postal_code", "city", "district"]
 
+    def validate_name(self, value):
+        user = self.context["user"]
+        try:
+            warehouse = Warehouse.objects.get(name=value, company=user.company)
+        except Warehouse.DoesNotExist:
+            warehouse = None
+        if warehouse:
+            raise ValidationError("This name of warehouse is already taken!")
+        return value
+
     def create(self, validated_data):
         user = self.context["user"]
-        company = user.company
-        warehouse = Warehouse.objects.create(
-            name=validated_data["name"],
-            address=validated_data["address"],
-            postal_code=validated_data["postal_code"],
-            city=validated_data["city"],
-            district=validated_data["district"],
-            company=company,
+        warehouse = Warehouse.create(
+            values=validated_data,
+            user=user,
         )
         warehouse.save()
         return warehouse

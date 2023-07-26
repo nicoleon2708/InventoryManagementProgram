@@ -48,3 +48,32 @@ class TransferDetail(models.Model):
 
     def __str__(self):
         return f"{self.transfer} - {self.product}"
+
+    @classmethod
+    def create(cls, values):
+        return cls.objects.create(
+            product=values["product"],
+            transfer=values["transfer"],
+            quantity=values["quantity"],
+            price=values["price"],
+            status=values["status"],
+        )
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.id is not None:
+            transfer = self.transfer
+            if not transfer.is_import:
+                all_completed = True
+                transfer_detail_list = transfer.transfer_detail.all()
+                for detail in transfer_detail_list:
+                    if detail.status != "COMPLETED":
+                        all_completed = False
+                        break
+                    if not all_completed:
+                        break
+                if all_completed:
+                    transfer.status = Transfer.StatusChoice.completed
+                else:
+                    transfer.status = Transfer.StatusChoice.on_transfer
+                transfer.save()

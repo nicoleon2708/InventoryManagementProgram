@@ -7,11 +7,13 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from auth_app.models.user import User
+from auth_app.serializers.change_password_serializer import \
+    ChangePasswordSerializer
 from auth_app.serializers.login_serializer import LoginSerializer
 from auth_app.serializers.logout_serializer import LogoutSerializer
 from auth_app.serializers.register_serializer import RegisterSerializer
-from auth_app.serializers.upload_profile_picture_serializer import \
-    UploadProfilePictureSerializer
+from auth_app.serializers.update_user_information_serializer import \
+    UpdateUserInformationSerializer
 from auth_app.serializers.user_serializer import UserSerializer
 
 
@@ -68,22 +70,39 @@ class AuthViewSet(viewsets.ModelViewSet):
         methods=["GET"], detail=False, url_path="info", serializer_class=UserSerializer
     )
     def get(self, request, format=None):
-        serializer = UserSerializer(request.user)
+        serializer = UserSerializer(request.user, context={"request": request})
         return JsonResponse(data=serializer.data, status=status.HTTP_200_OK)
 
     @permission_classes([IsAuthenticated])
     @action(
         methods=["PUT"],
         detail=True,
-        url_path="upload_picture",
-        serializer_class=UploadProfilePictureSerializer,
+        url_path="update",
+        serializer_class=UpdateUserInformationSerializer,
     )
-    def upload_profile_picture(self, request, pk=None, *args, **kwargs):
+    def update_account_informatino(self, request, pk=None, *args, **kwargs):
         data = {}
         serializer = self.get_serializer(
             data=request.data, context={"pk": pk, "request": request}
         )
         serializer.is_valid(raise_exception=True)
-        serializer.upload_profile_picture()
-        data["message"] = "Upload profile successful"
+        serializer.update_user_information()
+        data["message"] = "Update Information successfully!"
+        return JsonResponse(data=data, status=status.HTTP_200_OK)
+
+    @permission_classes([IsAuthenticated])
+    @action(
+        methods=["PUT"],
+        detail=True,
+        url_path="change_password",
+        serializer_class=ChangePasswordSerializer,
+    )
+    def change_user_password(self, request, pk=None, *args, **kwargs):
+        data = {}
+        serializer = self.get_serializer(
+            data=request.data, context={"pk": pk, "request": request}
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.change_user_password()
+        data["message"] = "Change user password successfully!"
         return JsonResponse(data=data, status=status.HTTP_200_OK)

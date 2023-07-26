@@ -13,7 +13,6 @@ class GroupRule(models.Model):
         blank=True,
     )
 
-
     class Meta:
         db_table = "group_rule"
         verbose_name = "group of rules"
@@ -21,3 +20,11 @@ class GroupRule(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
+    @classmethod
+    def create(cls, values, user=None):
+        return cls.objects.create(
+            name=values["name"],
+            description=values["description"],
+            user=(user and user or None),
+        )

@@ -30,3 +30,13 @@ class OutcomeDetail(models.Model):
 
     def __str__(self):
         return f"{self.outcome} - {self.product} - {self.quantity} - {self.price}"
+
+    @classmethod
+    def create(cls, values, outcome=None):
+        return cls.objects.create(
+            outcome=(outcome and outcome or None),
+            product=values["product"],
+            quantity=values["quantity"],
+            price=values["price"],
+            unit=values["unit"],
+        )

@@ -65,5 +65,19 @@ class OutcomeService:
     def get_external_location_of_partner(outcome):
         list_location = OutcomeService.get_all_location_of_warehouse(outcome)
         partner = outcome.partner
-        external_outcome = list_location.get(partner=partner)
+        try:
+            external_outcome = list_location.get(partner=partner)
+        except Location.DoesNotExist:
+            external_outcome = None
         return external_outcome
+
+    @staticmethod
+    def check_status_transfer_detail(outcome):
+        for transfer in outcome.transfers.all():
+            transfer_detail_list = transfer.transfer_detail.all()
+            if not all(
+                detail.status in ["COMPLETED", "Completed"]
+                for detail in transfer_detail_list
+            ):
+                return False
+        return True

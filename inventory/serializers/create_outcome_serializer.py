@@ -21,14 +21,19 @@ class CreateOutcomeSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         order_detail = validated_data.pop("order_detail")
         user = self.context["request"].user
-        outcome = Outcome.objects.create(
-            user=user,
-            partner=validated_data.pop("partner"),
-            warehouse=validated_data.pop("warehouse"),
-        )
+        outcome = Outcome.create(values=validated_data, user=user)
         for detail in order_detail:
-            outcome_detail = OutcomeDetail.objects.create(outcome=outcome, **detail)
+            outcome_detail_values = {
+                "product": detail["product"],
+                "quantity": detail["quantity"],
+                "price": detail["price"],
+                "unit": detail["unit"],
+            }
+            outcome_detail = OutcomeDetail.create(
+                outcome=outcome, values=outcome_detail_values
+            )
             outcome_detail.save()
-            outcome.total_price = OutcomeService.calculate_total_price(outcome)
+            total_price = OutcomeService.calculate_total_price(outcome)
+        outcome.total_price = total_price
         outcome.save()
         return outcome

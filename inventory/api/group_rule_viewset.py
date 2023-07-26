@@ -36,9 +36,10 @@ class GroupRuleViewSet(InventoryStandardViewSet):
             data=request.data, context={"request": request}
         )
         serializer.is_valid(raise_exception=True)
-        serializer.create_group_rule()
+        group = serializer.create_group_rule()
+        serialized_group = CreateGroupRuleSerializer(group).data
         data["message"] = "Create group rule successful"
-        data["group_rule"] = serializer.data
+        data["group_rule"] = serialized_group
         return JsonResponse(data=data, status=status.HTTP_200_OK)
 
     @action(

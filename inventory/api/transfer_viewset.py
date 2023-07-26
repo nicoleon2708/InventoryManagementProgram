@@ -9,6 +9,8 @@ from inventory.serializers.confirm_import_product_serializer import \
     ConfirmImportProductSerializer
 from inventory.serializers.confirm_stock_transfer_serializer import \
     ConfirmStockTransferSerializer
+from inventory.serializers.delete_transfer_serializer import \
+    DeleteTransferSerializer
 from inventory.serializers.import_product_serializer import \
     ImportProductSerializer
 from inventory.serializers.transfer_serializer import TransferSerializer
@@ -24,8 +26,8 @@ class TransferViewSet(InventoryStandardViewSet):
     def get_queryset(self):
         user = self.request.user
         if user.is_superuser and user.is_staff:
-            return Transfer.objects.all()
-        return Transfer.objects.filter(user=user)
+            return Transfer.objects.all().order_by("-created_date")
+        return Transfer.objects.filter(user=user).order_by("-created_date")
 
     @action(
         methods=["POST"],
@@ -101,4 +103,20 @@ class TransferViewSet(InventoryStandardViewSet):
             destination_location = transfer.destination_location
             TransferService.import_product(product, quantity, destination_location)
         data["message"] = "Confirm purchase successfully"
+        return JsonResponse(data=data, status=status.HTTP_200_OK)
+
+    @action(
+        methods=["DELETE"],
+        url_path="delete",
+        serializer_class=DeleteTransferSerializer,
+        detail=True,
+    )
+    def delete_transfer(self, request, pk=None, *args, **kwargs):
+        data = {}
+        serializer = self.get_serializer(
+            data=request.data, context={"pk": pk, "request": request}
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.delete_transfer()
+        data["message"] = "Delete transfer successfully!"
         return JsonResponse(data=data, status=status.HTTP_200_OK)

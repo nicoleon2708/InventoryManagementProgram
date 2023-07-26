@@ -40,3 +40,17 @@ class Product(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
+    @classmethod
+    def create(cls, values, user=None):
+        return cls.objects.create(
+            name=values["name"],
+            unit=values["unit"],
+            weight=values["weight"],
+            price=values["price"],
+            image=values["image"],
+            description=values["description"],
+            barcode=values["barcode"],
+            group_rule=values["group_rule"],
+            company=(user and user.company or None),
+        )

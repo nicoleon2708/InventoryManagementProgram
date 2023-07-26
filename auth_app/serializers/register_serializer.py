@@ -1,9 +1,5 @@
-import requests
 from django.conf import settings
-from django.contrib.sites.shortcuts import get_current_site
-from django.urls import reverse
 from rest_framework import serializers
-from rest_framework.generics import GenericAPIView
 from rest_framework.validators import ValidationError
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -82,17 +78,8 @@ class RegisterSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
-        user = User.objects.create(
-            username=validated_data["username"],
-            email=validated_data["email"],
-            first_name=validated_data["first_name"],
-            last_name=validated_data["last_name"],
-            company_name=validated_data["company_name"],
-            phone=validated_data["phone"],
-            address=validated_data["address"],
-            postal_code=validated_data["postal_code"],
-            city=validated_data["city"],
-            district=validated_data["district"],
+        user = User.create(
+            values=validated_data,
         )
         user.role = Role.objects.get(id=1)
         user.set_password(validated_data["password"])
