@@ -1,0 +1,38 @@
+services: 
+  web: 
+    build: ../InventoryManagementProgram 
+    ports: 
+      - '8000:8000'
+    depends_on:
+      - db
+    links:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=uyennhi
+      - DB_NAME=inventory_management
+
+  db:
+    image: postgres
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=inventory_management
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=uyennhi
+
+  redis:
+    restart: always
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+
+volumes:
+
+  redisdata:
