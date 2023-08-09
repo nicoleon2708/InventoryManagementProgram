@@ -16,7 +16,9 @@ class TestOutcomeDetailViews(APITestCase, BaseModelTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_detail_outcome_detail(self):
-        detail_url = reverse("inventory:outcome_detail-detail", kwargs={"pk": self.outcome_detail.pk})
+        detail_url = reverse(
+            "inventory:outcome_detail-detail", kwargs={"pk": self.outcome_detail.pk}
+        )
         response = self.client_api.get(detail_url, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -26,9 +28,7 @@ class TestOutcomeDetailViews(APITestCase, BaseModelTestCase):
             "product": self.product.pk,
             "quantity": 300,
         }
-        add_product_url = reverse(
-            "inventory:outcome_detail-add-product-outcome"
-        )
+        add_product_url = reverse("inventory:outcome_detail-add-product-outcome")
         response = self.client_api.post(add_product_url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

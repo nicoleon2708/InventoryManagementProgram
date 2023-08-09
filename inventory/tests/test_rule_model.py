@@ -10,5 +10,5 @@ from inventory.tests.test_base_model import BaseModelTestCase
 
 class RuleTestCase(BaseModelTestCase):
     def test_rule_can_be_created(self):
-        self.assertIsInstance(self.rule, Rule)
-        self.assertEqual(self.rule.name, "Test rule")
+        self.assertIsInstance(self.rule1, Rule)
+        self.assertEqual(self.rule1.name, "Test rule")

@@ -40,6 +40,9 @@ class CreateProductSerializer(serializers.ModelSerializer):
             "barcode",
             "group_rule",
         ]
+        optional_fields = [
+            "image",
+        ]
 
     def validate_barcode(self, value):
         try:

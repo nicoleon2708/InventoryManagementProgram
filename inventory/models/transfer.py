@@ -56,6 +56,7 @@ class Transfer(models.Model):
         db_table = "transfer"
         verbose_name = "Transfer"
         verbose_name_plural = "Transfers"
+        ordering = ["-id"]
 
     def __str__(self):
         return f"{self.user} - {self.outcome} - {self.source_location} - {self.destination_location}"

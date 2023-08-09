@@ -21,6 +21,7 @@ class Warehouse(models.Model):
         db_table = "warehouse"
         verbose_name = "Warehouse"
         verbose_name_plural = "Warehouses"
+        ordering = ["-id"]
 
     def __str__(self):
         return f"{self.name}"

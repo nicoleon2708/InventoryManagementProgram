@@ -35,16 +35,13 @@ class TestOutcomeViews(APITestCase, BaseModelTestCase):
             "product": self.outcome_detail.product.pk,
             "quantity": self.outcome_detail.quantity,
             "price": self.outcome_detail.price,
-            "unit": self.outcome_detail.product.unit
+            "unit": self.outcome_detail.product.unit,
         }
-        order_detail = [
-            detail
-        ]
+        order_detail = [detail]
         data = {
             "partner": self.partner.pk,
             "warehouse": self.warehouse.pk,
-            "order_detail": order_detail
+            "order_detail": order_detail,
         }
         response = self.client_api.post(create_outcome_url, data, format="json")
-        print(f"{response.content.decode()}")
         self.assertEqual(response.status_code, status.HTTP_200_OK)

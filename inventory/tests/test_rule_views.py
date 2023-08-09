@@ -18,14 +18,14 @@ class TestRuleViews(APITestCase, BaseModelTestCase):
 
     def test_get_detail_rule(self):
         detail_url = reverse(
-            "inventory:rule_stocks-detail", kwargs={"pk": self.rule.pk}
+            "inventory:rule_stocks-detail", kwargs={"pk": self.rule1.pk}
         )
         response = self.client_api.get(detail_url, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_delete_rule(self):
         detail_url = reverse(
-            "inventory:rule_stocks-delete-rule", kwargs={"pk": self.rule.pk}
+            "inventory:rule_stocks-delete-rule", kwargs={"pk": self.rule1.pk}
         )
         response = self.client_api.delete(detail_url, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -46,7 +46,7 @@ class TestRuleViews(APITestCase, BaseModelTestCase):
 
     def test_update_rule(self):
         update_url = reverse(
-            "inventory:rule_stocks-update-rule", kwargs={"pk": self.rule.pk}
+            "inventory:rule_stocks-update-rule", kwargs={"pk": self.rule1.pk}
         )
         data = {
             "name": "test update rule",

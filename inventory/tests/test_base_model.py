@@ -1,5 +1,6 @@
 from django.forms.models import model_to_dict
 from django.test import TestCase
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from auth_app.models.role import Role
 from auth_app.models.user import User
@@ -101,13 +102,26 @@ class BaseModelTestCase(TestCase):
             location=cls.location2, product=cls.product, quantity=100
         )
 
-        cls.rule = Rule.objects.create(
+        cls.rule1 = Rule.objects.create(
             name="Test rule",
             description="Hello",
             group=cls.group_rule,
             source_location=cls.location1,
             destination_location=cls.location2,
             types_of_rule=Rule.TypeChoice.get_stock_directly,
+            user=cls.user,
+        )
+        location_external = Location.objects.get(
+            name__contains="External Outcome", warehouse=cls.warehouse
+        )
+
+        cls.rule2 = Rule.objects.create(
+            name="Test rule 2",
+            description="hello",
+            group=cls.group_rule,
+            source_location=cls.location2,
+            destination_location=location_external,
+            types_of_rule=Rule.TypeChoice.get_stock_or_pull_from_location,
             user=cls.user,
         )
 
@@ -121,6 +135,8 @@ class BaseModelTestCase(TestCase):
             district="7",
             user=cls.user,
         )
+        location_external.partner = cls.partner
+        location_external.save()
 
         cls.outcome = Outcome.objects.create(
             user=cls.user, partner=cls.partner, warehouse=cls.warehouse

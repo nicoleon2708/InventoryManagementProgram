@@ -11,4 +11,4 @@ class PartnerTestCase(BaseModelTestCase):
         self.assertIsInstance(self.partner, Partner)
 
     def test_partner_has_address(self):
-        self.assertIsNotNone(self.partner.address, 'Partner does not have address')
+        self.assertIsNotNone(self.partner.address, "Partner does not have address")

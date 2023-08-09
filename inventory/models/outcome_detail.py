@@ -27,6 +27,7 @@ class OutcomeDetail(models.Model):
         db_table = "outcome_detail"
         verbose_name = "Outcome detail"
         verbose_name_plural = "Outcome details"
+        ordering = ["-id"]
 
     def __str__(self):
         return f"{self.outcome} - {self.product} - {self.quantity} - {self.price}"

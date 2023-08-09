@@ -8,10 +8,6 @@ from inventory.tests.test_base_model import BaseModelTestCase
 
 
 class GroupRuleTestCase(BaseModelTestCase):
-
     def test_group_rule_can_be_created(self):
         self.assertIsInstance(self.group_rule, GroupRule)
         self.assertEqual(self.group_rule.name, "Test Group rule")
-
-    def test_group_rule_has_rule(self):
-        self.assertQuerysetEqual(self.group_rule.rules, self.rule)

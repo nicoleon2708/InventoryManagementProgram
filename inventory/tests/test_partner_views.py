@@ -2,6 +2,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient, APITestCase
 
+from inventory.models.location import Location
 from inventory.tests.test_base_model import BaseModelTestCase
 
 
@@ -57,4 +58,15 @@ class TestPartnerViews(APITestCase, BaseModelTestCase):
             "company": self.user.company.pk,
         }
         response = self.client_api.put(update_url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_update_external_location_warehouse_of_partner(self):
+        url = reverse(
+            "inventory:partner-update-external-location", kwargs={"pk": self.partner.pk}
+        )
+        location_external = Location.objects.get(
+            name__contains="External Outcome", warehouse=self.warehouse
+        )
+        data = {"location": location_external.pk}
+        response = self.client_api.put(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)

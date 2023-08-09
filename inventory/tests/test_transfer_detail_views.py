@@ -18,6 +18,8 @@ class TestTransferDetailViews(APITestCase, BaseModelTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_detail_transfer(self):
-        detail_url = reverse("inventory:transfer_detail-detail", kwargs={"pk": self.transfer.pk})
+        detail_url = reverse(
+            "inventory:transfer_detail-detail", kwargs={"pk": self.transfer.pk}
+        )
         response = self.client_api.get(detail_url, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)

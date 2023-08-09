@@ -17,6 +17,7 @@ class GroupRule(models.Model):
         db_table = "group_rule"
         verbose_name = "group of rules"
         verbose_name_plural = "groups of rules"
+        ordering = ["-id"]
 
     def __str__(self):
         return f"{self.name}"

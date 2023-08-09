@@ -3,6 +3,8 @@ services:
     build: ../InventoryManagementProgram 
     ports: 
       - '8000:8000'
+    volumes:
+      - .:/InventoryManagementProgram
     depends_on:
       - db
     links:
@@ -32,7 +34,6 @@ services:
       - "6379:6379"
     volumes:
       - redisdata:/data
-
+      
 volumes:
-
   redisdata:

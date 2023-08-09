@@ -38,16 +38,10 @@ class RegisterSerializer(serializers.ModelSerializer):
         get verification from user
         """
         user_data = User.objects.get(id=user.get("id"))
-
-        # current_site = get_current_site(request).domain
-        # hard code
         domain = settings.FRONT_END
         activate_token = RefreshToken.for_user(user_data).access_token
-        # domains = request.META.get('HTTP_HOST')
-        # print(domains)
-        # relative_link = reverse('auth_app:email-verification')
-        # activate_link = 'http://localhost:3000'+relative_link+f'?token={activate_token}'
         activate_link = f"http://{domain}/email-verification/{activate_token}/"
+        # get activate_link, get method to the link to get the activate_token
         subject = "Activate your account"
         message = "Click the link below to verify your email! \n" + f"{activate_link}"
 
@@ -81,7 +75,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         user = User.create(
             values=validated_data,
         )
-        user.role = Role.objects.get(id=1)
+        user.role = Role.objects.filter(type_of_roles=Role.TypeChoice.is_owner).first()
         user.set_password(validated_data["password"])
         user.save()
         return user

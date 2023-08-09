@@ -45,6 +45,7 @@ class TransferDetail(models.Model):
         db_table = "transfer_detail"
         verbose_name = "Transfer Detail"
         verbose_name_plural = "Transfer Details"
+        ordering = ["-id"]
 
     def __str__(self):
         return f"{self.transfer} - {self.product}"

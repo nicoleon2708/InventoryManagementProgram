@@ -59,6 +59,7 @@ class Rule(models.Model):
         db_table = "rule"
         verbose_name = "Rule"
         verbose_name_plural = "Rules"
+        ordering = ["-id"]
 
     def __str__(self):
         return f"{self.name}"

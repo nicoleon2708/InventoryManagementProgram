@@ -8,7 +8,6 @@ from inventory.tests.test_base_model import BaseModelTestCase
 
 
 class UserTestCase(BaseModelTestCase):
-
     def test_user_can_be_created(self):
         self.assertTrue(isinstance(self.user, User))
         self.assertEqual(self.user.first_name, "Nicole")

@@ -27,6 +27,7 @@ class LocationStock(models.Model):
         db_table = "location_stock"
         verbose_name = "Location Stock"
         verbose_name_plural = "Location Stocks"
+        ordering = ["-id"]
 
     def __str__(self):
         return f"{self.product} - {self.location} - {self.quantity}"

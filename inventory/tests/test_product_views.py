@@ -39,9 +39,9 @@ class TestProductViews(APITestCase, BaseModelTestCase):
             "weight": 10,
             "barcode": "1231221",
             "company": self.user.company.pk,
+            "description": "test",
         }
         response = self.client_api.post(create_url, data, format="multipart")
-        print(f"{response.content.decode()}")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_update_product(self):

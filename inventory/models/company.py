@@ -25,6 +25,7 @@ class Company(models.Model):
         db_table = "company"
         verbose_name = "company"
         verbose_name_plural = "companies"
+        ordering = ["-id"]
 
     def __str__(self):
         return f"{self.name}"

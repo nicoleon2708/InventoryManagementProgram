@@ -47,7 +47,7 @@ class RuleViewSet(InventoryStandardViewSet):
         detail=True,
         serializer_class=UpdateRuleSerializer,
     )
-    def update_group_rule(self, request, pk=None, *args, **kwargs):
+    def update_rule(self, request, pk=None, *args, **kwargs):
         data = {}
         serializer = self.get_serializer(
             data=request.data, context={"pk": pk, "request": request}

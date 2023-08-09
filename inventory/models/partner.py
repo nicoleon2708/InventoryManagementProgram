@@ -22,6 +22,7 @@ class Partner(models.Model):
         db_table = "partner"
         verbose_name = "Partner"
         verbose_name_plural = "Partners"
+        ordering = ["-id"]
 
     def __str__(self):
         return f"Partner({self.company_name} - {self.contact_name})"
