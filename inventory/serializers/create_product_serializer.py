@@ -1,9 +1,9 @@
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 
+from inventory.exception import CustomBadRequest
 from inventory.models.group_rule import GroupRule
 from inventory.models.product import Product
-from inventory.models.warehouse import Warehouse
 
 
 class GroupRuleBasedOnCurrentUser(serializers.PrimaryKeyRelatedField):
@@ -50,17 +50,19 @@ class CreateProductSerializer(serializers.ModelSerializer):
         except Product.DoesNotExist:
             product = None
         if product:
-            raise ValidationError("This barcode is already applied to another product.")
+            raise CustomBadRequest(
+                "This barcode is already applied to another product."
+            )
         return value
 
     def validate_weight(self, value):
         if value < 0:
-            raise ValidationError("Weight of product can not be negative!")
+            raise CustomBadRequest("Weight of product can not be negative!")
         return value
 
     def validate_price(self, value):
         if value < 0:
-            raise ValidationError("Price of product can not be negative")
+            raise CustomBadRequest("Price of product can not be negative")
         return value
 
     def create(self, validated_data):

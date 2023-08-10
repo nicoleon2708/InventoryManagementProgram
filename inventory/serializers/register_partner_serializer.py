@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 
+from inventory.exception import CustomBadRequest
 from inventory.models.partner import Partner
 
 
@@ -33,12 +34,12 @@ class RegisterPartnerSerializer(serializers.ModelSerializer):
         except Partner.DoesNotExist:
             partner = None
         if partner:
-            raise ValidationError("This name of partner is already taken!")
+            raise CustomBadRequest("This name of partner is already taken!")
         return value
 
     def validate_contact_phone(self, value):
         if len(value) != 10:
-            raise ValidationError("Phone digits is not valid!")
+            raise CustomBadRequest("Phone digits is not valid!")
         return value
 
     def register_partner(self):

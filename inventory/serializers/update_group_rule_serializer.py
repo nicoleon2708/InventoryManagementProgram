@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 
+from inventory.exception import CustomBadRequest
 from inventory.models.group_rule import GroupRule
 
 
@@ -20,7 +21,7 @@ class UpdateGroupRuleSerializer(serializers.ModelSerializer):
         except GroupRule.DoesNotExist:
             group = None
         if group:
-            raise ValidationError("This name of group rule is already taken!")
+            raise CustomBadRequest("This name of group rule is already taken!")
         return value
 
     def validate(self, data):
@@ -28,7 +29,7 @@ class UpdateGroupRuleSerializer(serializers.ModelSerializer):
         try:
             group = GroupRule.objects.get(id=pk)
         except GroupRule.DoesNotExist:
-            raise ValidationError("This group rule has not created yet!")
+            raise CustomBadRequest("This group rule has not created yet!")
         data["group"] = group
         return data
 

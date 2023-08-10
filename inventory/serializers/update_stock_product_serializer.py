@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 
+from inventory.exception import CustomBadRequest
 from inventory.models.product import Product
 
 
@@ -16,14 +17,14 @@ class UpdateStockProductSerializer(serializers.ModelSerializer):
 
     def validate_quantity(self, value):
         if value < 0:
-            raise ValidationError("Stock can not be negative!")
+            raise CustomBadRequest("Stock can not be negative!")
         return value
 
     def validate(self, data):
         id = self.context["pk"]
         product = Product.objects.get(id=id)
         if not product:
-            raise ValidationError("This product is not exist!")
+            raise CustomBadRequest("This product is not exist!")
         data["product"] = product
         return data
 

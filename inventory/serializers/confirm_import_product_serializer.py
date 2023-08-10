@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 
+from inventory.exception import CustomBadRequest
 from inventory.models.transfer import Transfer
 from inventory.models.transfer_detail import TransferDetail
 from inventory.services.transfer_service import TransferService
@@ -16,7 +17,7 @@ class ConfirmImportProductSerializer(serializers.ModelSerializer):
         try:
             transfer = Transfer.objects.get(id=pk)
         except Transfer.DoesNotExist:
-            raise ValidationError("This transfer is not created yet!")
+            raise CustomBadRequest("This transfer is not created yet!")
         data["transfer"] = transfer
         return data
 

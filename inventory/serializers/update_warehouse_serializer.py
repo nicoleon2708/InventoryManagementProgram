@@ -2,7 +2,6 @@ import sentry_sdk
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 
-from inventory.exception import CustomBadRequest
 from inventory.models.warehouse import Warehouse
 
 

@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 
+from inventory.exception import CustomBadRequest
 from inventory.models.location import Location
 from inventory.models.location_stock import LocationStock
 from inventory.models.warehouse import Warehouse
@@ -47,7 +48,7 @@ class TransferStockSerializer(serializers.ModelSerializer):
     def validate(self, data):
         location_stock = data["location_stock"]
         if data["quantity"] > location_stock.quantity:
-            raise ValidationError("Out of limit stocks")
+            raise CustomBadRequest("Out of limit stocks")
         if location_stock.quantity == 0:
-            raise ValidationError("This product is out of stock!")
+            raise CustomBadRequest("This product is out of stock!")
         return data

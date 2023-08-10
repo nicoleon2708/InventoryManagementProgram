@@ -10,6 +10,7 @@ from rest_framework.validators import ValidationError
 
 from auth_app.models.user import User
 from auth_app.utils import send_mail
+from inventory.exception import CustomBadRequest
 
 
 class RecoveryPasswordSerializer(serializers.ModelSerializer):
@@ -40,7 +41,7 @@ class RecoveryPasswordSerializer(serializers.ModelSerializer):
 
     def validate_email(self, value):
         if not User.objects.get(email=value):
-            raise ValidationError("User with this email has not created yet!")
+            raise CustomBadRequest("User with this email has not created yet!")
         return value
 
     def validate(self, data):

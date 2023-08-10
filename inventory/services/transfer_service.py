@@ -3,6 +3,7 @@ from copy import deepcopy
 
 from rest_framework.validators import ValidationError
 
+from inventory.exception import CustomBadRequest
 from inventory.models.location_stock import LocationStock
 from inventory.models.transfer import Transfer
 from inventory.models.transfer_detail import TransferDetail
@@ -308,4 +309,4 @@ class TransferService:
                         )
                         break
         else:
-            raise ValidationError("No suitable rules")
+            raise CustomBadRequest("No suitable rules")

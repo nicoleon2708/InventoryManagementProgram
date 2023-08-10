@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 
+from inventory.exception import CustomBadRequest
 from inventory.models.location_stock import LocationStock
-from inventory.models.product import Product
 
 
 class SubstractStockSerializer(serializers.ModelSerializer):
@@ -14,7 +14,7 @@ class SubstractStockSerializer(serializers.ModelSerializer):
 
     def validate_sub_quantity(self, value):
         if value < 0:
-            raise ValidationError("You must enter a positive number!")
+            raise CustomBadRequest("You must enter a positive number!")
 
         return value
 
@@ -23,9 +23,9 @@ class SubstractStockSerializer(serializers.ModelSerializer):
         try:
             stock = LocationStock.objects.get(id=pk)
         except LocationStock.DoesNotExist:
-            raise ValidationError("This stock does not exist!")
+            raise CustomBadRequest("This stock does not exist!")
         if data["sub_quantity"] > stock.quantity:
-            raise ValidationError(
+            raise CustomBadRequest(
                 "The quantity you want to substract is more than the stock available!"
             )
         data["stock"] = stock

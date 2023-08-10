@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_framework.validators import ValidationError
 
 from auth_app.models.user import User
+from inventory.exception import CustomBadRequest
 
 
 class UpdateUserInformationSerializer(serializers.ModelSerializer):
@@ -22,7 +23,7 @@ class UpdateUserInformationSerializer(serializers.ModelSerializer):
 
     def validate_phone(self, value):
         if len(value) != 10:
-            raise ValidationError("The digits of phone number is not valid!")
+            raise CustomBadRequest("The digits of phone number is not valid!")
         return value
 
     def validate(self, data):
@@ -30,7 +31,7 @@ class UpdateUserInformationSerializer(serializers.ModelSerializer):
         try:
             user = User.objects.get(id=pk)
         except User.DoesNotExist:
-            raise ValidationError("This user is not exist!")
+            raise CustomBadRequest("This user is not exist!")
         data["user"] = user
         return data
 

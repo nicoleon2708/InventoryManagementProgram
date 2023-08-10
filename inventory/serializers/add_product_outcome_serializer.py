@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 
+from inventory.exception import CustomBadRequest
 from inventory.models.outcome import Outcome
 from inventory.models.outcome_detail import OutcomeDetail
 from inventory.models.product import Product
@@ -40,12 +41,12 @@ class AddProductOutcomeSerializer(serializers.ModelSerializer):
 
     def validate_quantity(self, value):
         if value <= 0:
-            raise ValidationError("Quantity of product must not be negative!")
+            raise CustomBadRequest("Quantity of product must not be negative!")
         return value
 
     def validate_price(self, value):
         if value <= 0:
-            raise ValidationError("Price of product must not be negative!")
+            raise CustomBadRequest("Price of product must not be negative!")
         return value
 
     def validate(self, data):

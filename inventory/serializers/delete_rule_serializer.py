@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 
+from inventory.exception import CustomBadRequest
 from inventory.models.rule import Rule
 
 
@@ -14,7 +15,7 @@ class DeleteRuleSerializer(serializers.ModelSerializer):
         try:
             rule = Rule.objects.get(id=pk)
         except Rule.DoesNotExist:
-            raise ValidationError("This rule has not created yet!")
+            raise CustomBadRequest("This rule has not created yet!")
         data["rule"] = rule
         return data
 

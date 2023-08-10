@@ -6,6 +6,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from auth_app.models.role import Role
 from auth_app.models.user import User
 from auth_app.utils import send_mail
+from inventory.exception import CustomBadRequest
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -41,7 +42,6 @@ class RegisterSerializer(serializers.ModelSerializer):
         domain = settings.FRONT_END
         activate_token = RefreshToken.for_user(user_data).access_token
         activate_link = f"http://{domain}/email-verification/{activate_token}/"
-        # get activate_link, get method to the link to get the activate_token
         subject = "Activate your account"
         message = "Click the link below to verify your email! \n" + f"{activate_link}"
 
@@ -51,23 +51,23 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def validate_username(self, value):
         if User.objects.filter(username=value):
-            raise ValidationError("This username is already exists!")
+            raise CustomBadRequest("This username is already exists!")
         return value
 
     def validate_email(self, value):
         if User.objects.filter(email=value):
-            raise ValidationError("This email is already taken!")
+            raise CustomBadRequest("This email is already taken!")
         return value
 
     def validate_phone(self, value):
         if len(value) != 10:
-            raise ValidationError("The digits of phone number is not valid!")
+            raise CustomBadRequest("The digits of phone number is not valid!")
         return value
 
     def validate(self, data):
         username = data.get("username", None)
         if data["password"] != data["confirm_password"]:
-            raise ValidationError("Confirm password must be match!")
+            raise CustomBadRequest("Confirm password must be match!")
 
         return data
 

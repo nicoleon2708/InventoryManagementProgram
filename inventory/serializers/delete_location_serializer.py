@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 
+from inventory.exception import CustomBadRequest
 from inventory.models.location import Location
 
 
@@ -14,7 +15,7 @@ class DeleteLocationSerializer(serializers.ModelSerializer):
         try:
             location = Location.objects.get(id=pk)
         except Location.DoesNotExist:
-            raise ValidationError("This location does not exist!")
+            raise CustomBadRequest("This location does not exist!")
         data["location"] = location
         return data
 

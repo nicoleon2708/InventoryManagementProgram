@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 
+from inventory.exception import CustomBadRequest
 from inventory.models.outcome_detail import OutcomeDetail
 from inventory.services.outcome_service import OutcomeService
 
@@ -17,9 +18,9 @@ class RemoveProductQuantityOutcomeSerializer(serializers.ModelSerializer):
         try:
             outcome_detail = OutcomeDetail.objects.get(id=pk)
         except OutcomeDetail.DoesNotExist:
-            raise ValidationError("This outcome detail is not exist!")
+            raise CustomBadRequest("This outcome detail is not exist!")
         if data["quantity"] > outcome_detail.quantity:
-            raise ValidationError(
+            raise CustomBadRequest(
                 "You can't remove quantity greater than outcome detail's quantity!"
             )
         data["outcome_detail"] = outcome_detail

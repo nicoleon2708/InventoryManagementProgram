@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 
+from inventory.exception import CustomBadRequest
 from inventory.models.group_rule import GroupRule
 from inventory.models.location import Location
 from inventory.models.rule import Rule
@@ -49,7 +50,7 @@ class SetUpRuleSerializer(serializers.ModelSerializer):
         except Rule.DoesNotExist:
             rule = None
         if rule:
-            raise ValidationError("This name of rule is already taken!")
+            raise CustomBadRequest("This name of rule is already taken!")
         return value
 
     def set_up_rule(self):

@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 
+from inventory.exception import CustomBadRequest
 from inventory.models.location import Location
 from inventory.models.partner import Partner
 from inventory.models.warehouse import Warehouse
@@ -31,7 +32,7 @@ class UpdateExternalOutcomeSerializer(serializers.ModelSerializer):
         try:
             partner = Partner.objects.get(id=pk)
         except Location.DoesNotExist:
-            raise ValidationError("This partner has not been created yet!")
+            raise CustomBadRequest("This partner has not been created yet!")
         data["partner"] = partner
         return data
 

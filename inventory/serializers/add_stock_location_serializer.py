@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 
+from inventory.exception import CustomBadRequest
 from inventory.models.location import Location
 from inventory.models.location_stock import LocationStock
 from inventory.models.product import Product
@@ -44,7 +45,7 @@ class AddStockLocationSerializer(serializers.ModelSerializer):
 
     def validate_quantity(self, value):
         if value < 0:
-            raise ValidationError("This quantity can not have a negative number")
+            raise CustomBadRequest("This quantity can not have a negative number")
         return value
 
     def validate(self, data):

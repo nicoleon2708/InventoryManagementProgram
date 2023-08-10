@@ -2,7 +2,6 @@ import requests
 import sentry_sdk
 from django.conf import settings
 from rest_framework.views import exception_handler
-from sentry_sdk import capture_exception
 
 
 def send_mail(subject, message, recipient):

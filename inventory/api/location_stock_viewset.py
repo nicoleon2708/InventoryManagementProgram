@@ -16,8 +16,6 @@ from inventory.serializers.location_stock_serializer import \
     LocationStockSerializer
 from inventory.serializers.substract_stock_serializer import \
     SubstractStockSerializer
-from inventory.serializers.transfer_stock_serializer import \
-    TransferStockSerializer
 from inventory.services.location_stock_service import LocationStockService
 
 
