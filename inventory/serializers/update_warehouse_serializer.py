@@ -1,6 +1,8 @@
 import sentry_sdk
 from rest_framework import serializers
-from inventory.exception import BadRequest400
+from rest_framework.validators import ValidationError
+
+from inventory.exception import CustomBadRequest
 from inventory.models.warehouse import Warehouse
 
 
@@ -22,7 +24,7 @@ class UpdateWarehouseSerializer(serializers.ModelSerializer):
         except Warehouse.DoesNotExist:
             warehouse = None
         if warehouse:
-            raise BadRequest400("This name of warehouse is already taken!")
+            raise ValidationError("This name of warehouse is already taken!")
         return value
 
     def validate(self, data):
@@ -30,7 +32,7 @@ class UpdateWarehouseSerializer(serializers.ModelSerializer):
         try:
             warehouse = Warehouse.objects.get(id=pk)
         except Warehouse.DoesNotExist:
-            raise BadRequest400("This warehouse is not longer exist!")
+            raise ValidationError("This warehouse is not longer exist!")
         data["warehouse"] = warehouse
         return data
 
