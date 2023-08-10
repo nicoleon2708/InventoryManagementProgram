@@ -190,7 +190,9 @@ class TransferService:
         return total_price
 
     @staticmethod
-    def logistic(destination, product, quantity, outcome, transfer_list):
+    def logistic(
+        destination, product, quantity, outcome, transfer_list, is_outcome=False
+    ):
         list_rule = list(deepcopy(product.group_rule.rules.all()))
         match_rule = TransferService.get_rule_match_destination(destination, list_rule)
         while match_rule:
@@ -222,23 +224,35 @@ class TransferService:
                     )
                     break
                 else:
-                    TransferService.get_stock_directly(
-                        match_rule,
-                        stock_source_location,
-                        stock_destination_location,
-                        product,
-                        quantity,
-                    )
-                    TransferService.create_transfer_and_transfer_detail_while_valid(
-                        match_rule=match_rule,
-                        product=product,
-                        quantity=quantity,
-                        price=product.price,
-                        transfer_list=transfer_list,
-                        outcome=outcome,
-                        status=TransferDetail.StatusChoice.completed,
-                    )
-                    break
+                    if not is_outcome:
+                        TransferService.get_stock_directly(
+                            match_rule,
+                            stock_source_location,
+                            stock_destination_location,
+                            product,
+                            quantity,
+                        )
+                        TransferService.create_transfer_and_transfer_detail_while_valid(
+                            match_rule=match_rule,
+                            product=product,
+                            quantity=quantity,
+                            price=product.price,
+                            transfer_list=transfer_list,
+                            outcome=outcome,
+                            status=TransferDetail.StatusChoice.completed,
+                        )
+                        break
+                    else:
+                        TransferService.create_transfer_and_transfer_detail_while_valid(
+                            match_rule=match_rule,
+                            product=product,
+                            quantity=quantity,
+                            price=product.price,
+                            transfer_list=transfer_list,
+                            outcome=outcome,
+                            status=TransferDetail.StatusChoice.on_transfer,
+                        )
+                        break
             original_quantity = quantity
             if match_rule.types_of_rule == "ANT_LC":
                 if (
@@ -264,22 +278,34 @@ class TransferService:
                         match_rule.source_location, list_rule
                     )
                 else:
-                    TransferService.get_stock_directly(
-                        match_rule,
-                        stock_source_location,
-                        stock_destination_location,
-                        product,
-                        quantity,
-                    )
-                    TransferService.create_transfer_and_transfer_detail_while_valid(
-                        match_rule=match_rule,
-                        product=product,
-                        quantity=quantity,
-                        price=product.price,
-                        transfer_list=transfer_list,
-                        outcome=outcome,
-                        status=TransferDetail.StatusChoice.completed,
-                    )
-                    break
+                    if not is_outcome:
+                        TransferService.get_stock_directly(
+                            match_rule,
+                            stock_source_location,
+                            stock_destination_location,
+                            product,
+                            quantity,
+                        )
+                        TransferService.create_transfer_and_transfer_detail_while_valid(
+                            match_rule=match_rule,
+                            product=product,
+                            quantity=quantity,
+                            price=product.price,
+                            transfer_list=transfer_list,
+                            outcome=outcome,
+                            status=TransferDetail.StatusChoice.completed,
+                        )
+                        break
+                    else:
+                        TransferService.create_transfer_and_transfer_detail_while_valid(
+                            match_rule=match_rule,
+                            product=product,
+                            quantity=quantity,
+                            price=product.price,
+                            transfer_list=transfer_list,
+                            outcome=outcome,
+                            status=TransferDetail.StatusChoice.on_transfer,
+                        )
+                        break
         else:
             raise ValidationError("No suitable rules")

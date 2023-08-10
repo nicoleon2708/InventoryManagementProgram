@@ -1,5 +1,6 @@
 import requests
 from django.conf import settings
+from rest_framework.views import exception_handler
 
 
 def send_mail(subject, message, recipient):
@@ -13,3 +14,12 @@ def send_mail(subject, message, recipient):
             "text": {message},
         },
     )
+
+
+def custom_exception_handler(exc, context):
+    response = exception_handler(exc, context)
+    
+    if response is not None:
+        response.data["status_code"] = response.status_code
+
+    return response

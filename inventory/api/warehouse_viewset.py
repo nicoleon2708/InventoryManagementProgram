@@ -1,11 +1,15 @@
+import sentry_sdk
 from django.http import JsonResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
+from rest_framework.exceptions import MethodNotAllowed, NotAcceptable
 
 from auth_app.permissions.is_admin_permission import IsAdminPermission
 from auth_app.permissions.is_owner_permission import IsOwnerPermission
+from inventory.exception import BadRequest400
 from inventory.filters.warehouse_filter import WarehouseFilter
+from inventory.models.location import Location
 from inventory.models.warehouse import Warehouse
 from inventory.pagination import CustomPagination
 from inventory.serializers.create_warehouse_serializer import \
@@ -51,7 +55,9 @@ class WarehouseViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(
             data=request.data, context={"user": request.user}
         )
-        serializer.is_valid(raise_exception=True)
+        if not serializer.is_valid():
+            print(avc)
+            return JsonResponse(serializer.errors, status=400)
         serializer.save()
         data["status"] = "Create successfull"
         data["warehouse"] = serializer.data
@@ -76,6 +82,12 @@ class WarehouseViewSet(viewsets.ModelViewSet):
             },
         )
         serializer.is_valid(raise_exception=True)
+        # if not serializer.is_valid():
+        #     # print(avc)
+        #     # sentry_sdk.capture_message("123123")
+        #     return BadRequest400
+        #     # raise sentry_sdk.capture_exception("123")
+        #     # return JsonResponse(serializer.errors, status=400)
         serializer.update_warehouse()
         data["messages"] = "Update successful"
         data["warehouse"] = serializer.data

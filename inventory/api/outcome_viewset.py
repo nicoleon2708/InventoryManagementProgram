@@ -67,7 +67,12 @@ class OutcomeViewSet(InventoryStandardViewSet):
                 )
                 if list_match_rule:
                     TransferService.logistic(
-                        destination_location, product, quantity, outcome, transfer_list
+                        destination_location,
+                        product,
+                        quantity,
+                        outcome,
+                        transfer_list,
+                        is_outcome=True,
                     )
                 else:
                     raise ValidationError("No suitable rules for this warehouse")
