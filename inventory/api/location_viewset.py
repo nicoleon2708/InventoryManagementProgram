@@ -44,6 +44,8 @@ class LocationViewSet(InventoryStandardViewSet):
         serializer = self.get_serializer(
             data=request.data, context={"user": request.user, "request": request}
         )
+        # serializer.is_valid(raise_exception=True)
+        # return JsonResponse(data=serializer.data, status=status.HTTP_400_BAD_REQUEST)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return JsonResponse(data=serializer.data, status=status.HTTP_200_OK)

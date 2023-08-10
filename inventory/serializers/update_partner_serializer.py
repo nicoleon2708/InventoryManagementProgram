@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 
+from inventory.exception import CustomBadRequest
 from inventory.models.partner import Partner
 
 
@@ -25,12 +26,12 @@ class UpdatePartnerSerializer(serializers.ModelSerializer):
         except Partner.DoesNotExist:
             partner = None
         if partner:
-            raise ValidationError("This name of partner is already taken!")
+            raise CustomBadRequest("This name of partner is already taken!")
         return value
 
     def validate_contact_phone(self, value):
         if len(value) != 10:
-            raise ValidationError("Phone digits is not valid!")
+            raise CustomBadRequest("Phone digits is not valid!")
         return value
 
     def validate(self, data):
@@ -38,7 +39,7 @@ class UpdatePartnerSerializer(serializers.ModelSerializer):
         try:
             partner = Partner.objects.get(id=pk)
         except Partner.DoesNotExist:
-            raise ValidationError("This partner has not been registered yet!")
+            raise CustomBadRequest("This partner has not been registered yet!")
         data["partner"] = partner
         return data
 

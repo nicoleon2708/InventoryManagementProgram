@@ -3,6 +3,7 @@ from rest_framework import serializers
 from rest_framework.validators import ValidationError
 
 from auth_app.models.user import User
+from inventory.exception import CustomBadRequest
 
 
 class ChangePasswordSerializer(serializers.ModelSerializer):
@@ -29,11 +30,11 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
             user = None
         if user:
             if not check_password(password, user.password):
-                raise ValidationError(
+                raise CustomBadRequest(
                     "Password of this user is not correct, try again!"
                 )
         if data["new_password"] != data["conf_new_password"]:
-            raise ValidationError("Confirm password must be match!")
+            raise CustomBadRequest("Confirm password must be match!")
         data["user"] = user
         return data
 

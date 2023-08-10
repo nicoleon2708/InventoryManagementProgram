@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 
+from inventory.exception import CustomBadRequest
 from inventory.models.location_stock import LocationStock
 from inventory.models.product import Product
 
@@ -15,7 +16,7 @@ class DeleteStockLocationSerializer(serializers.ModelSerializer):
         try:
             stock = LocationStock.objects.get(id=pk)
         except LocationStock.DoesNotExist:
-            raise ValidationError("This stock does not exist!")
+            raise CustomBadRequest("This stock does not exist!")
         data["stock"] = stock
         return data
 

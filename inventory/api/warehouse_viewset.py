@@ -1,3 +1,4 @@
+import sentry_sdk
 from django.http import JsonResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, status, viewsets
@@ -52,6 +53,8 @@ class WarehouseViewSet(viewsets.ModelViewSet):
             data=request.data, context={"user": request.user}
         )
         serializer.is_valid(raise_exception=True)
+        # if not serializer.is_valid():
+        #     return JsonResponse(serializer.errors, status=400)
         serializer.save()
         data["status"] = "Create successfull"
         data["warehouse"] = serializer.data
@@ -76,6 +79,12 @@ class WarehouseViewSet(viewsets.ModelViewSet):
             },
         )
         serializer.is_valid(raise_exception=True)
+        # if not serializer.is_valid():
+        #     # print(avc)
+        #     # sentry_sdk.capture_message("123123")
+        #     return BadRequest400
+        #     # raise sentry_sdk.capture_exception("123")
+        #     # return JsonResponse(serializer.errors, status=400)
         serializer.update_warehouse()
         data["messages"] = "Update successful"
         data["warehouse"] = serializer.data

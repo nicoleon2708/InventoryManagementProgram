@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 
+from inventory.exception import CustomBadRequest
 from inventory.models.location import Location
 from inventory.models.warehouse import Warehouse
 
@@ -55,7 +56,7 @@ class UpdateLocationSerializer(serializers.ModelSerializer):
         except Location.DoesNotExist:
             location = None
         if location:
-            raise ValidationError("This name of location is already taken!")
+            raise CustomBadRequest("This name of location is already taken!")
         return value
 
     def validate(self, data):
@@ -63,7 +64,7 @@ class UpdateLocationSerializer(serializers.ModelSerializer):
         try:
             location = Location.objects.get(id=pk)
         except Location.DoesNotExist:
-            raise ValidationError("This location does not exits!")
+            raise CustomBadRequest("This location does not exits!")
         data["location"] = location
         return data
 

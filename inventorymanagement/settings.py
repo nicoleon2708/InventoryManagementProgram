@@ -13,7 +13,17 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+# recommender.py
+import redis
+import sentry_sdk
+from django.conf import settings
 from django.utils.translation import gettext_lazy as _
+from sentry_sdk.integrations.django import DjangoIntegration
+
+# settings.py
+
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -68,6 +78,18 @@ CORS_ORIGIN_WHITELIST = ("http://localhost:3000", "http://127.0.0.1:3000")
 
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
+SENTRY_DSN = os.environ.get(
+    "SENTRY_DSN",
+    "https://11191f5a007dcc78f15dd6d7f732eb19@o4505661217701888.ingest.sentry.io/4505661244506112",
+)
+
+sentry_sdk.init(
+    dsn=SENTRY_DSN,
+    integrations=[DjangoIntegration()],
+    traces_sample_rate=1.0,
+    send_default_pii=True,
+)
+
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "inventory.pagination.CustomPagination",
     "DEFAULT_AUTHENTICATION_CLASSES": (
@@ -78,18 +100,19 @@ REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
     "DEFAULT_PERMISSIONS_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
-    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
-    'TEST_REQUEST_RENDERER_CLASSES': [
-        'rest_framework.renderers.MultiPartRenderer',
-        'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.TemplateHTMLRenderer'
-    ]
+    "TEST_REQUEST_DEFAULT_FORMAT": "json",
+    "TEST_REQUEST_RENDERER_CLASSES": [
+        "rest_framework.renderers.MultiPartRenderer",
+        "rest_framework.renderers.JSONRenderer",
+        "rest_framework.renderers.TemplateHTMLRenderer",
+    ],
+    "EXCEPTION_HANDLER": "auth_app.utils.custom_exception_handler",
 }
 
 AUTH_USER_MODEL = "auth_app.User"
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": True,
@@ -166,12 +189,13 @@ WSGI_APPLICATION = "inventorymanagement.wsgi.application"
 
 ASGI_APPLICATION = "inventorymanagement.asgi.application"
 
+REDIS_HOST = os.environ.get("REDIS_HOST", "redis")
 # Configure the Channels layer
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
+            "hosts": [(f"{REDIS_HOST}", 6379)],
         },
     },
 }
@@ -246,9 +270,17 @@ PASSWORD_HASHERS = [
 ]
 
 # Email settings
-MAILGUN_ACCESS_KEY = "a426b960b5980394e47fcd7a51849942-db4df449-fced0575"
-MAILGUN_SERVER_URL = "https://api.mailgun.net/v3/sandbox4c50849ae51d4160b37a9c0ded4aad28.mailgun.org/messages"
-MAILGUN_SERVER_NAME = "sandbox4c50849ae51d4160b37a9c0ded4aad28.mailgun.org"
+MAILGUN_ACCESS_KEY = os.environ.get(
+    "MAILGUN_ACCESS_KEY", "a426b960b5980394e47fcd7a51849942-db4df449-fced0575"
+)
+MAILGUN_SERVER_URL = os.environ.get(
+    "MAILGUN_SERVER_URL",
+    "https://api.mailgun.net/v3/sandbox4c50849ae51d4160b37a9c0ded4aad28.mailgun.org/messages",
+)
+MAILGUN_SERVER_NAME = os.environ.get(
+    "MAILGUN_SERVER_NAME", "sandbox4c50849ae51d4160b37a9c0ded4aad28.mailgun.org"
+)
+
 EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")

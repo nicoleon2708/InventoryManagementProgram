@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 
+from inventory.exception import CustomBadRequest
 from inventory.models.warehouse import Warehouse
 
 
@@ -14,7 +15,7 @@ class DeleteWarehouseSerializer(serializers.ModelSerializer):
         try:
             warehouse = Warehouse.objects.get(id=pk)
         except Warehouse.DoesNotExist:
-            raise ValidationError("This warehouse is not longer exist!")
+            raise CustomBadRequest("This warehouse is not longer exist!")
         data["warehouse"] = warehouse
         return data
 

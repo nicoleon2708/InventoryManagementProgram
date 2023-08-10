@@ -21,7 +21,7 @@ class NotificationViewSet(InventoryStandardViewSet):
         user = self.request.user
         if user.is_superuser and user.is_staff:
             return Notification.objects.all()
-        return Notification.objects.filter(user=user).order_by('-created_date')
+        return Notification.objects.filter(user=user).order_by("-created_date")
 
     @action(
         methods=["PUT"],

@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 
+from inventory.exception import CustomBadRequest
 from inventory.models.partner import Partner
 
 
@@ -14,7 +15,7 @@ class DeletePartnerSerializer(serializers.ModelSerializer):
         try:
             partner = Partner.objects.get(id=pk)
         except Partner.DoesNotExist:
-            raise ValidationError("This partner has not registered yet!")
+            raise CustomBadRequest("This partner has not registered yet!")
         data["partner"] = partner
         return data
 

@@ -54,6 +54,13 @@ class User(AbstractUser):
             district=values["district"],
         )
 
+    @property
+    def get_image_url(self):
+        if self.image and hasattr(self.image, "url"):
+            return self.image.url
+        else:
+            return "images/user_image/default.png"
+
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if not self.is_superuser:

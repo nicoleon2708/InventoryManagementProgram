@@ -3,6 +3,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.validators import ValidationError
 
 from auth_app.serializers.user_serializer import UserSerializer
+from inventory.exception import CustomBadRequest
 from inventory.models.company import Company
 
 
@@ -32,14 +33,14 @@ class UpdateCompanySerializer(serializers.ModelSerializer):
 
     def validate_phone(self, value):
         if len(value) != 10:
-            raise ValidationError("The digits of phone number is not valid!")
+            raise CustomBadRequest("The digits of phone number is not valid!")
 
     def validate(self, data):
         pk = self.context["pk"]
         try:
             company = Company.objects.get(id=pk)
         except Company.DoesNotExist:
-            raise ValidationError("This company is not longer exist!")
+            raise CustomBadRequest("This company is not longer exist!")
         data["company"] = company
         return data
 

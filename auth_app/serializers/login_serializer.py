@@ -3,15 +3,11 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import update_last_login
 from rest_framework import serializers
-from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.validators import ValidationError
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.views import TokenObtainPairView
 
 from auth_app.models.user import User
-from auth_app.serializers.user_serializer import UserSerializer
+from inventory.exception import CustomBadRequest
 
 
 class LoginSerializer(serializers.Serializer):
@@ -33,7 +29,7 @@ class LoginSerializer(serializers.Serializer):
         try:
             User.objects.get(username=value)
         except User.DoesNotExist:
-            raise ValidationError("User with this username does not exist!")
+            raise CustomBadRequest("User with this username does not exist!")
         return value
 
     def get_token(self, user):
@@ -46,15 +42,15 @@ class LoginSerializer(serializers.Serializer):
         if self.validate_username(username):
             user = User.objects.get(username=username)
             if not check_password(password, user.password):
-                raise ValidationError(
+                raise CustomBadRequest(
                     "Password of this user is not correct, try again!"
                 )
             if not user:
-                raise ValidationError("Invalid credentials, try again!")
+                raise CustomBadRequest("Invalid credentials, try again!")
         if not user.is_active:
-            raise ValidationError("User is not active")
+            raise CustomBadRequest("User is not active")
         if not user.is_verified:
-            raise ValidationError("User's email has not verified yet!")
+            raise CustomBadRequest("User's email has not verified yet!")
         user = authenticate(username=username, password=password)
         token = self.get_token(user)
         data["user"] = user

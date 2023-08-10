@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 
+from inventory.exception import CustomBadRequest
 from inventory.models.group_rule import GroupRule
 from inventory.models.product import Product
 
@@ -28,7 +29,7 @@ class ApplyRuleToProduct(serializers.ModelSerializer):
         try:
             product = Product.objects.get(id=pk)
         except Product.DoesNotExist:
-            raise ValidationError("This product is not exist!")
+            raise CustomBadRequest("This product is not exist!")
         data["product"] = product
         return data
 

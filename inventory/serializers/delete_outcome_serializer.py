@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 
+from inventory.exception import CustomBadRequest
 from inventory.models.outcome import Outcome
 
 
@@ -14,7 +15,7 @@ class DeleteOutcomeSerializer(serializers.ModelSerializer):
         try:
             outcome = Outcome.objects.get(id=pk)
         except Outcome.DoesNotExist:
-            raise ValidationError("This outcome has not created yet!")
+            raise CustomBadRequest("This outcome has not created yet!")
         data["outcome"] = outcome
         return data
 

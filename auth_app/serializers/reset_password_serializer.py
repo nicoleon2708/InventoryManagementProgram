@@ -6,6 +6,7 @@ from rest_framework import serializers
 from rest_framework.validators import ValidationError
 
 from auth_app.models.user import User
+from inventory.exception import CustomBadRequest
 
 
 class ResetPasswordSeriallizer(serializers.ModelSerializer):
@@ -21,14 +22,14 @@ class ResetPasswordSeriallizer(serializers.ModelSerializer):
         token = self.context.get("kwargs").get("token")
         new_password = data.get("new_password")
         if data["new_password"] != data["conf_new_password"]:
-            raise ValidationError("Confirm new password is not match!")
+            raise CustomBadRequest("Confirm new password is not match!")
 
         id = force_str(urlsafe_base64_decode(uidb64))
         user = User.objects.get(id=id)
         if not PasswordResetTokenGenerator().check_token(user, token):
-            raise ValidationError("The reset link is invalid")
+            raise CustomBadRequest("The reset link is invalid")
         if not user:
-            raise ValidationError("This user is not exist!")
+            raise CustomBadRequest("This user is not exist!")
 
         data["user"] = user
         data["new_password"] = new_password

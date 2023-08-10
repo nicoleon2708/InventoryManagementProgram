@@ -7,6 +7,7 @@ from rest_framework.decorators import action
 from rest_framework.validators import ValidationError
 
 from inventory.api.inventory_standard_viewset import InventoryStandardViewSet
+from inventory.exception import CustomBadRequest
 from inventory.filters.outcome_filter import OutcomeFilter
 from inventory.models.outcome import Outcome
 from inventory.serializers.create_outcome_serializer import \
@@ -67,10 +68,15 @@ class OutcomeViewSet(InventoryStandardViewSet):
                 )
                 if list_match_rule:
                     TransferService.logistic(
-                        destination_location, product, quantity, outcome, transfer_list
+                        destination_location,
+                        product,
+                        quantity,
+                        outcome,
+                        transfer_list,
+                        is_outcome=True,
                     )
                 else:
-                    raise ValidationError("No suitable rules for this warehouse")
+                    raise CustomBadRequest("No suitable rules for this warehouse")
 
         data["message"] = "Create outcome successful"
         return JsonResponse(data=data, status=status.HTTP_200_OK)

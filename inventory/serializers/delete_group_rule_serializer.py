@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 
+from inventory.exception import CustomBadRequest
 from inventory.models.group_rule import GroupRule
 
 
@@ -14,7 +15,7 @@ class DeleteGroupRuleSerializer(serializers.ModelSerializer):
         try:
             group = GroupRule.objects.get(id=pk)
         except GroupRule.DoesNotExist:
-            raise ValidationError("This group rule has not created yet!")
+            raise CustomBadRequest("This group rule has not created yet!")
         data["group"] = group
         return data
 

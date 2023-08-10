@@ -22,7 +22,6 @@ schema_view = get_schema_view(
     permission_classes=[permissions.AllowAny],
 )
 
-
 urlpatterns = [
     path("inventory/", include("inventory.urls"), name="inventory_app"),
     path("push_notification/", include("notifications.urls"), name="notification_app"),

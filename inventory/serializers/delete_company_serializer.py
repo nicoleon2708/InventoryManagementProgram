@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 
+from inventory.exception import CustomBadRequest
 from inventory.models.company import Company
 
 
@@ -14,7 +15,7 @@ class DeleteCompanySerializer(serializers.ModelSerializer):
         try:
             company = Company.objects.get(id=pk)
         except Company.DoesNotExist:
-            raise ValidationError("This company does not exist!")
+            raise CustomBadRequest("This company does not exist!")
         data["company"] = company
         return data
 

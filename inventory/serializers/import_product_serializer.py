@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from inventory.exception import CustomBadRequest
 from inventory.models.location import Location
 from inventory.models.partner import Partner
 from inventory.models.transfer import Transfer

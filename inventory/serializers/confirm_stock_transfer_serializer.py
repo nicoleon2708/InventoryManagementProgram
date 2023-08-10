@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 
+from inventory.exception import CustomBadRequest
 from inventory.models.location_stock import LocationStock
 from inventory.models.transfer import Transfer
 from inventory.models.transfer_detail import TransferDetail
@@ -17,7 +18,7 @@ class ConfirmStockTransferSerializer(serializers.ModelSerializer):
         try:
             transfer = Transfer.objects.get(id=pk)
         except Transfer.DoesNotExist:
-            raise ValidationError("This transfer is not created yet!")
+            raise CustomBadRequest("This transfer is not created yet!")
         list_transfer_detail = TransferService.get_list_transfer_detail_of_transfer(
             transfer
         )
@@ -43,7 +44,7 @@ class ConfirmStockTransferSerializer(serializers.ModelSerializer):
                     or stock_transfer.quantity == 0
                     or stock_transfer.quantity < transfer_detail.quantity
                 ):
-                    raise ValidationError("Do not enough stock to confirm transfer!")
+                    raise CustomBadRequest("Do not enough stock to confirm transfer!")
 
                 transfer_detail.status = TransferDetail.StatusChoice.completed
                 transfer_detail.save()
