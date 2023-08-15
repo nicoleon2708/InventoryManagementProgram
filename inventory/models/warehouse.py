@@ -26,6 +26,22 @@ class Warehouse(models.Model):
     def __str__(self):
         return f"{self.name}"
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        location_list = self.locations.all()
+        main_location = location_list.filter(name__contains="/MainLocation").first()
+        external_location = location_list.filter(
+            name__contains="/External Outcome"
+        ).first()
+        external_location.name = f"{self.name}/External Outcome"
+        main_location.name = f"{self.name}/MainLocation"
+        main_location.address = self.address
+        main_location.district = self.district
+        main_location.city = self.city
+        main_location.postal_code = self.postal_code
+        main_location.save()
+        external_location.save()
+
     @classmethod
     def create(cls, values, user=None):
         return cls.objects.create(

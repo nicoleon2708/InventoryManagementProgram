@@ -1,6 +1,8 @@
+import json
 from copy import deepcopy
 from functools import reduce
 
+from django.db import transaction
 from django.http import JsonResponse
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -49,35 +51,35 @@ class OutcomeViewSet(InventoryStandardViewSet):
             data=request.data, context={"request": request}
         )
         serializer.is_valid(raise_exception=True)
-        outcome = serializer.save()
-        list_location = OutcomeService.get_all_location_of_warehouse(outcome)
-        transfer_list = []
-        if list_location:
-            list_outcome_detail = OutcomeService.get_list_outcome_detail_of_outcome(
-                outcome
-            )
-            for outcome_detail in list_outcome_detail:
-                product = outcome_detail.product
-                quantity = outcome_detail.quantity
-                destination_location = OutcomeService.get_external_location_of_partner(
+        with transaction.atomic():
+            outcome = serializer.save()
+            list_location = OutcomeService.get_all_location_of_warehouse(outcome)
+            transfer_list = []
+            if list_location:
+                list_outcome_detail = OutcomeService.get_list_outcome_detail_of_outcome(
                     outcome
                 )
-                list_rule = product.group_rule.rules.all()
-                list_match_rule = list_rule.filter(
-                    destination_location__in=list_location
-                )
-                if list_match_rule:
-                    TransferService.logistic(
-                        destination_location,
-                        product,
-                        quantity,
-                        outcome,
-                        transfer_list,
-                        is_outcome=True,
+                for outcome_detail in list_outcome_detail:
+                    product = outcome_detail.product
+                    quantity = outcome_detail.quantity
+                    destination_location = (
+                        OutcomeService.get_external_location_of_partner(outcome)
                     )
-                else:
-                    raise CustomBadRequest("No suitable rules for this warehouse")
-
+                    list_rule = product.group_rule.rules.all()
+                    list_match_rule = list_rule.filter(
+                        destination_location__in=list_location
+                    )
+                    if list_match_rule:
+                        TransferService.logistic(
+                            destination_location,
+                            product,
+                            quantity,
+                            outcome,
+                            transfer_list,
+                            is_outcome=True,
+                        )
+                    else:
+                        raise CustomBadRequest("No suitable rules for this warehouse")
         data["message"] = "Create outcome successful"
         return JsonResponse(data=data, status=status.HTTP_200_OK)
 
