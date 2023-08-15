@@ -11,7 +11,7 @@ You can perform live demo here. [Live Demo](http://www.fasttransfer.id.vn/).
 ## Screenshots
 
 - Landing page
-  ![App Screenshot](/InventoryManagementProgram/mediafiles/landing_page.png?raw=true "Landing Page")
+  ![App Screenshot](/mediafiles/landing_page.png?raw=true "Landing Page")
 
 - Login page
   ![App Screenshot](/InventoryManagementProgram/mediafiles/login_page.png?raw=true "Login Page")
