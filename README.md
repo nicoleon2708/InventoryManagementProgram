@@ -11,34 +11,34 @@ You can perform live demo here. [Live Demo](http://www.fasttransfer.id.vn/).
 ## Screenshots
 
 - Landing page
-  ![App Screenshot](/mediafiles/landing_page.png?raw=true "Landing Page")
+  ![App Screenshot](/InventoryManagementProgram/mediafiles/landing_page.png?raw=true "Landing Page")
 
 - Login page
-  ![App Screenshot](/mediafiles/login_page.png?raw=true "Login Page")
+  ![App Screenshot](/InventoryManagementProgram/mediafiles/login_page.png?raw=true "Login Page")
 - Register page
-  ![App Screenshot](/mediafiles/register_page.png?raw=true "Login Page")
-  ![App Screenshot](/mediafiles/register_page_2.png?raw=true "Login Page")
+  ![App Screenshot](/InventoryManagementProgram/mediafiles/register_page.png?raw=true "Login Page")
+  ![App Screenshot](/InventoryManagementProgram/mediafiles/register_page_2.png?raw=true "Login Page")
 
 - Product management
-  ![App Screenshot](/mediafiles/product_list.png?raw=true "Product Page")
+  ![App Screenshot](/InventoryManagementProgram/mediafiles/product_list.png?raw=true "Product Page")
 
 - Warehouse management
-  ![App Screenshot](/mediafiles/warehouse_management.png?raw=true "Warehouse Page")
+  ![App Screenshot](/InventoryManagementProgram/mediafiles/warehouse_management.png?raw=true "Warehouse Page")
 
 - Location management
-  ![App Screenshot](/mediafiles/location_management.png?raw=true "Location Page")
+  ![App Screenshot](/InventoryManagementProgram/mediafiles/location_management.png?raw=true "Location Page")
 
 - Outcome management
-  ![App Screenshot](/mediafiles/outcome_management.png?raw=true "Outcome Page")
+  ![App Screenshot](/InventoryManagementProgram/mediafiles/outcome_management.png?raw=true "Outcome Page")
 
 - Transfer management
-  ![App Screenshot](/mediafiles/transfer_management.png?raw=true "Transfer Page")
+  ![App Screenshot](/InventoryManagementProgram/mediafiles/transfer_management.png?raw=true "Transfer Page")
 
 - Stock management
-  ![App Screenshot](/mediafiles/stock_management.png?raw=true "Stock Page")
+  ![App Screenshot](/InventoryManagementProgram/mediafiles/stock_management.png?raw=true "Stock Page")
 
 - Rule of product management
-  ![App Screenshot](/mediafiles/rule_management.png?raw=true "Rule product Page")
+  ![App Screenshot](/InventoryManagementProgram/mediafiles/rule_management.png?raw=true "Rule product Page")
 
 ## Table of Contents
 
