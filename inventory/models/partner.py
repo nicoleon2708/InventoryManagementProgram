@@ -39,3 +39,13 @@ class Partner(models.Model):
             district=values["district"],
             user=(user and user or None),
         )
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        location_partner = self.locations.first()
+        location_partner.name = f"Location/{self.company_name}"
+        location_partner.address = self.address
+        location_partner.district = self.district
+        location_partner.city = self.city
+        location_partner.postal_code = self.postal_code
+        location_partner.save()
