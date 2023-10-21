@@ -90,6 +90,22 @@ You can perform live demo here. [Live Demo](http://www.fasttransfer.id.vn/).
 - Automatically create transfer invoices based on rules being applied to product
 - Product get from partner's outcome
 
+## Environment variables
+To run this project, you will need to add the following environment variables to your .env file
+
+APP_DB_ENGINE
+DB_NAME
+DB_USER
+DB_PASSWORD
+DB_HOST
+DB_PORT
+REDIS_HOST
+SENTRY_DSN
+MAILGUN_ACCESS_KEY
+MAILGUN_SERVER_URL
+MAILGUN_SERVER_NAME
+
+
 ## Setup
 
 ```bash
